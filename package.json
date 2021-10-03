@@ -1,0 +1,23 @@
+{
+  "name": "koner_sever",
+  "version": "1.0.0",
+  "description": "conv",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamedelkony/convFourier_Server.git"
+  },
+  "author": "koner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mohamedelkony/convFourier_Server/issues"
+  },
+  "homepage": "https://github.com/mohamedelkony/convFourier_Server#readme"
+}
