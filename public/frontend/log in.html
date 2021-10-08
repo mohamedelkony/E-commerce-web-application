@@ -5,27 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ConvFourier</title>
 <link rel="icon" href="resources/7777.png">
-<div style="text-align: center;">
-    <h1>ConvFourier</h1>
-    <img src="resources/convfourier_img.jpg" alt="convfourier_img">
+<link rel="stylesheet" href="IStyle.css">
+<div class='cDiv'>
+    <h3>ConvFourier</h3>
+    <img src="resources/convfourier_img.jpg" alt="convfourier_img"><br>
 </div>
 </head>
 
-
 <body>
-    <form style="text-align: center;">
-        <label>email </label>
-        <input type="emial"><br>
-        <label>password </label>
-        <input type="password"><br><br>
-        <input type="submit" value="Log in"><br>
-        <label>don't have account <a href="/signup"> sign up </a> </label><br>
-    </form>
-    <br><br>
-    <button onclick="async_await()"> test async_await</button>
-    <button onclick="promises()"> test promises</button>
-    <button onclick="generators_async()"> test generators async</button>
-    <script src="promises vs generators vs await.js"></script>
-</body>
 
+    <div class='cDiv iborder'>
+        <form  action="/login" method="POST">
+            <input type="email" name='email' placeholder="email">
+            <input type="password" name='password' placeholder="password">
+            <input type="submit" value="Log in">
+            <button class='cBtn' onclick="location.href='/signup'" type='button'>Create new account</button><br>
+        </form>
+    </div>
+</body>
 </html>

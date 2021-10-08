@@ -3,36 +3,35 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible content=IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="stylesheet" href="style1.css">
+<link rel="stylesheet" href="IStyle.css">
 <title>ConvFourier</title>
 <div style="text-align: center;">
-    <h1>ConvFourier</h1>
-    <img src="resources/convfourier_img.jpg" alt="convfourier_img">
+    <h2>ConvFourier</h2>
 </div>
 </head>
 
 <body>
-    <form method="POST" action="/signup">
-        <label for="name">name </label>
-        <input type="text" name="name" id="name" required><br>
-        <label>gender </label>
-        <div>
+    <div class='cDiv iborder'>
+        <form method="POST" action="/users">
+            <label for="username">username </label>
+            <input type="text" name="username" id="username" required><br>
+            <label>email </label>
+            <input type="email" id="email" name="email" required><br>
+            <label>password </label>
+            <input type="password" id="password" name="password" required><br>
+            <label>re enter password </label>
+            <input type="password" name="repassword" id="repassword"><br><br>
+            <label>gender : </label>
             <label for="male">Male </label>
-            <input type="radio" id="male" name="gender" checked="checked" value="0"><br>
+            <input type="radio" id="male" name="gender" checked="checked" value="male">
             <label for="female">Female </label>
-            <input type="radio" id="female" name="gender" value="1"><br>
-        </div>
-        <label>data of birth </label>
-        <input type="date" id="birth" name="birth" max="2017-12-31"><br>
-        <label>e-mail </label>
-        <input type="email" id="email" name="email" required><br>
-        <label>password </label>
-        <input type="password" id="password" name="password" required><br>
-        <label>re enter password </label>
-        <input type="password"><br><br>
-        <input type="submit" value="Sign up">
-        <input type="button" onclick="postData()" value="Sign up">
-    </form>
+            <input type="radio" id="female" name="gender" value="female"><br><br>
+            <label>data of birth </label>
+            <input type="date" id="birth" name="birth" max="2017-12-31"><br><br>
+            <input type="submit" value="Sign up">
+            <input type="button" onclick="postData()" value="fetch">
+        </form>
+    </div>
     <h6 id='status'></h6>
 </body>
 
@@ -40,13 +39,14 @@
 <script>
     async function postData() {
         const data = {};
-        data.name = document.getElementById("name").value;
+        data.username = document.getElementById("username").value;
         data.gender = Array.from(document.getElementsByName("gender")).find(r => r.checked).value;
         data.email = document.getElementById("email").value;
         data.password = document.getElementById("password").value;
         data.birth = new Date(document.getElementById("birth").value);
+        data.repassword = document.getElementById("repassword").value;
         try {
-            const res = await fetch('/signup', {
+            const res = await fetch('/users', {
                 body: JSON.stringify(data),
                 method: 'POST',
                 headers: {
@@ -56,7 +56,7 @@
             if (!res.ok)
                 document.getElementById("status").innerText += await res.text();
         } catch (error) {
-            document.getElementById("status").innerText +="network error :" +error.toString();
+            document.body.innerHTML  += "network error :" + error.toString();
         }
     }
 
