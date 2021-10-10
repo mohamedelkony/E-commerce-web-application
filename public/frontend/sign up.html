@@ -3,10 +3,10 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible content=IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="stylesheet" href="IStyle.css">
+<link rel="stylesheet" href="/IStyle.css">
 <title>ConvFourier</title>
 <div style="text-align: center;">
-    <h2>ConvFourier</h2>
+    <h2>ConvFourier</h2><hr>
 </div>
 </head>
 
@@ -55,6 +55,8 @@
             });
             if (!res.ok)
                 document.getElementById("status").innerText += await res.text();
+            else
+             window.location.href='/profile/'+data.username;
         } catch (error) {
             document.body.innerHTML  += "network error :" + error.toString();
         }

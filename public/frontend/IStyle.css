@@ -16,6 +16,7 @@ input[type='submit'],
 }
 
 body{
+    font-family:  sans-serif;
     background-color: rgb(252, 254, 255);
 }
 .cDiv{
@@ -26,3 +27,9 @@ body{
 .iborder{
     border:1px solid #ccc;
 }
+.Xtable{
+    width:90%;
+    border:1px solid #ccc;  
+    margin:auto;
+    padding:8px;
+ }

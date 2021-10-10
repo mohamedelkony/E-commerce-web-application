@@ -2,7 +2,7 @@
 GET http://localhost:3000/ HTTP/1.1
 Set-Cookie: id=XS12;Secure;httpOnly
 
-### 
+### resources test
 GET http://127.0.0.1:3000/resources/7777.png HTTP/1.1
 
 ### 
@@ -12,14 +12,25 @@ GET http://127.0.0.1:3000/index.html HTTP/1.1
 GET http://localhost:3000/users HTTP/1.1
 Connection : keep-alive
 
+### get user data
+GET http://localhost:3000/users/mohamed_elkony HTTP/1.1
+Connection : keep-alive
+
+
+### go to user profile
+GET http://localhost:3000/profile/mohamed_elkony HTTP/1.1
+Connection : keep-alive
+
 ### new user
 POST http://127.0.0.1:3000/users HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "777",
-    "email": "michael@michael.com",
-    "age": 23,
-    "password": "1234567"
+    "username": "omar",
+    "email": "omar@momar.com",
+    "birth": "123456789",
+    "password": "123456789" ,
+    "gender":"female",
+    "repassword":"123456789"
 }
 
