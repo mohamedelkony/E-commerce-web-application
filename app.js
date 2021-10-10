@@ -52,7 +52,7 @@ app.get('/users/:username', (req, res) => {
 
 app.get('/',(req,res)=>
 {
-    res.status(500).send();
+    res.status(530).send();
 })
 app.post('/login', (req, res) => {
     try {

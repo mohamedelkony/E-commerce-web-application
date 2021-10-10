@@ -6,7 +6,7 @@ Set-Cookie: id=XS12;Secure;httpOnly
 GET http://127.0.0.1:3000/resources/7777.png HTTP/1.1
 
 ### 
-GET http://127.0.0.1:3000/index.html HTTP/1.1
+GET http://127.0.0.1:3000/ HTTP/1.1
 
 ### users
 GET http://localhost:3000/users HTTP/1.1
