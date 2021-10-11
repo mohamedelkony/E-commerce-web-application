@@ -3,16 +3,27 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible content=IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" href="/images/7777.png">
+<link rel="stylesheet" href="/styles/mainStyle.css">
+
 <title>ConvFourier</title>
-<link rel="icon" href="/resources/7777.png">
-<link rel="stylesheet" href="/IStyle.css">
+<%- include('./partials/menu')%>
 <div style="text-align: center;">
     <h3>ConvFourier</h3>
     <hr>
 </div>
+<style>
+a{
+text-decoration: none;
+padding: 15px 15px; 
+background-color: rgb(235, 241, 241);
+margin:0px;
+}
+</style>
 </head>
 
 <body>
+
     <h1 class='cDiv'>profile</h1>
     <div>
         <table class='Xtable'>
@@ -33,7 +44,8 @@
                 <td id='dateofbirth'></td>
             </tr>
             <tr>
-               <td><a href='/logout' class='cDiv'> logout</a></td> 
+                <td>requests</td>
+                <td id='count'></td>
             </tr>
         </table>
     </div>
@@ -49,15 +61,14 @@
             loadData(await res.json());
         else {
             document.body.innerHTML = "<h1>Can't get user</h1>" + res.statusText;
-            return; loadData(null);
         }
-
     }
     function loadData(data) {
         document.getElementById('username').innerHTML = data.username;
         document.getElementById('email').innerHTML = data.email;
         document.getElementById('gender').innerHTML = data.gender;
         document.getElementById('dateofbirth').innerHTML = data.birth;
+        document.getElementById('count').innerHTML = data.requestsCount;
     }
     getUserData(window.location.pathname.split('/')[2]);
 </script>
