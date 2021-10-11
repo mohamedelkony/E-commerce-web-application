@@ -1,0 +1,11 @@
+<div>
+    <a href='/'>home</a>
+    <% if(typeof username !='undefined'){%>
+        <a href='/profile/<%=username%>'>Profile</a>
+        <a href='/logout'>Logout</a>
+    <%}else{%>
+        <a href='/login'>Log in</a>
+        <a href='/signup'>Sign up</a>
+    <%}%>
+    <a href='/users'>Our users</a>
+</div>

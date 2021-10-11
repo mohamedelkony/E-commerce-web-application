@@ -1,19 +1,63 @@
-const exp = require("constants");
-const express=require("express");
-const path=require('path');
-const app =express();
+const express = require("express")
+const path = require('path')
+const sessions = require('express-session')
+const loginRouter = require('./routes/login')
+const usersRouter = require('./routes/users')
+const usersDB = require('./models/usersDB')
+const app = express()
 
-app.use('/',express.static(path.join(__dirname,'public','frontend')));
-app.use('/',express.json());
-const users=[];
-app.get('/',function(req,res){
-res.sendFile(path.join(__dirname,'public','frontend','index.html'));
+app.set('view engine', 'ejs')
+app.use('/', express.static(path.join(__dirname, 'public')))
+app.use('/', express.json())
+app.use('/', express.urlencoded({ extended: false }))
+app.use(sessions({
+    secret: '3zq2a165a0sdasx9zabhghgfbdfs8y7c5',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }
+}))
+app.use('/', (req, res, next) => {
+    if (req.session.username) {
+        let user = usersDB.ofUsername(req.session.username);
+        if (!user.log) {
+            user.log = [];
+            user.requestsCount = 0;
+        }
+        else {
+            user.log.push('request to ' + req.path + ', at' + new Date().toLocaleTimeString())
+            user.requestsCount++
+        }
+    };
+    next();
 })
-app.post('/signup',(req,res)=>{
-    users.push(req.body);
-    res.end();
+app.use('/login', loginRouter);
+app.use('/users', usersRouter);
+
+app.get('/', (req, res) => {
+    if (req.session.username)
+        res.redirect(`/profile/${req.session.username}`);
+    else
+        res.render('home.ejs', { username: req.session.username });
 })
-app.get('/users',(req,res)=>{
-    res.send(JSON.stringify(users));
+app.get('/logout', (req, res) => {
+    if (req.session.username)
+        req.session.destroy((err) => {
+            if (err)
+                res.status(500).send(`error can't logout`);
+            else
+                res.redirect('/');
+        })
 })
-app.listen(3000,function(){console.log(`server started`);});
+
+app.get('/profile/:username', (req, res) => {
+    res.render('profile', { username: req.session.username });
+})
+
+app.get('/signup', (req, res) => {
+    if (req.session.username)
+        res.redirect(`/profile/${req.session.username}`);
+    else
+        res.render('signup');
+})
+
+app.listen(3000, function () { console.log(`server started`); });
