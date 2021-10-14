@@ -7,12 +7,12 @@ const usersDB = require('../models/usersDB');
 usersRouter.post('/', async (req, res) => {
     try {
         const tst = await valdiateSignUP(req.body);
-        const emailused = usersDB.ofMail(req.body.email);
-        if (emailused != undefined)
+        const emailused =await usersDB.isEmailUsed(req.body.email);
+        if (emailused)
             res.status(301).send('email already used!');
         else {
+            await usersDB.addUser(req.body);
             req.session.username = req.body.username;
-            usersDB.addUser(req.body);
             res.redirect(`/profile/${req.body.username}`);
         }
     } catch (error) {
@@ -23,8 +23,8 @@ usersRouter.post('/', async (req, res) => {
 usersRouter.get('/', (req, res) => {
     res.send(usersDB.DB);
 })
-usersRouter.get('/:username', (req, res) => {
-    const user = usersDB.ofUsername(req.params.username);
+usersRouter.get('/:username',async (req, res) => {
+    const user = await usersDB.getByUsername(req.params.username);
     if (user == null)
         res.status(404).end();
     res.send(user);

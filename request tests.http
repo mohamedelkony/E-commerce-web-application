@@ -13,7 +13,7 @@ GET http://localhost:3000/users HTTP/1.1
 Connection : keep-alive
 
 ### get user data
-GET http://localhost:3000/users/mohamed_elkony HTTP/1.1
+GET http://localhost:3000/users/omar HTTP/1.1
 Connection : keep-alive
 
 
@@ -28,7 +28,7 @@ Content-Type: application/json
 {
     "username": "omar",
     "email": "omar@momar.com",
-    "birth": "123456789",
+    "birth": "1997-03-07",
     "password": "123456789" ,
     "gender":"female",
     "repassword":"123456789"

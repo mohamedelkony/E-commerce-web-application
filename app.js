@@ -17,8 +17,8 @@ app.use(sessions({
     cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 }
 }))
 app.use('/', (req, res, next) => {
-    if (req.session.username) {
-        let user = usersDB.ofUsername(req.session.username);
+  /*  if (req.session.username) {
+        let user = usersDB.getByUsername(req.session.username);
         if (!user.log) {
             user.log = [];
             user.requestsCount = 0;
@@ -27,7 +27,7 @@ app.use('/', (req, res, next) => {
             user.log.push('request to ' + req.path + ', at' + new Date().toLocaleTimeString())
             user.requestsCount++
         }
-    };
+    };*/
     next();
 })
 app.use('/login', loginRouter);
@@ -59,5 +59,9 @@ app.get('/signup', (req, res) => {
     else
         res.render('signup');
 })
-
-app.listen(3000, function () { console.log(`server started`); });
+usersDB.connect().then(() => {
+    app.listen(3000, function () { console.log(`server started listing at port :3000 !`); })
+}).catch((err) => {
+    console.log(err)
+    throw err
+})

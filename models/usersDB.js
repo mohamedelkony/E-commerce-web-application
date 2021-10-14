@@ -1,37 +1,46 @@
-const users = [
-    {
-        username: 'mohamed_elkony',
-        password: '123',
-        gender: 'male',
-        email: 'konykony22@gmail.com',
-        birth: new Date().toUTCString(),
-    },
-    {
-        username: 'leo_messi',
-        password: '111',
-        gender: 'male',
-        email: 'messi19@gmail.com',
-        birth: new Date().toUTCString(),
-    }
-];
-function ofMail(email){
-    const user=users.find(e=>e.email===email);
-    if(user!=undefined)
-        return user;
-    return null;
+const bcrypt = require('bcrypt')
+const mysql = require('mysql2/promise')
+let conn;
+function connect() {
+    return mysql.createConnection({
+        host: 'localhost', user: 'root',
+        password: '123456', database: 'convfourierDB'
+    }).then((connection) => {
+        console.log(`connected to DB server @localhost:3306 tid=${connection.threadId}`)
+        conn = connection
+    })
 }
-
-function ofUsername(username){
-    const user=users.find(e=>e.username===username);
-    if(user!=undefined)
-        return user;
-    return null;
+async function isEmailUsed(email) {
+    [res, fields] = await conn.execute('select email from users where email=?', [email])
+    if (res.length > 0)
+        return true
+    else
+        return false
 }
-function addUser(data)
-{
-    users.push(data);
+async function getPassword(email) {
+    const [res, fields] = await conn.query('select password,username from users where email=?', [email])
+    if (res.length == 0) return null;
+    return [res[0].password,res[0].username]
 }
-exports.addUser=addUser;
-exports.ofUsername=ofUsername;
-exports.ofMail=ofMail;
-exports.DB=users;
+async function getByUsername(username) {
+    const [res, fileds] = await conn.execute('select username,email,gender,id,birthdate from users where username=?', [username])
+    if (res.length === 0) return null
+    let user = {}
+    user.username = res[0].username
+    user.birth = res[0].birthdate
+    user.id = res[0].id
+    user.email = res[0].email
+    user.gender = res[0].gender
+    return user;
+}
+async function addUser(userData) {
+    userData.password = await bcrypt.hash(userData.password, 10)
+    const [res, fields] = await conn.execute(`insert into users(username,birthdate,email,password,gender) values(?,?,?,?,?)`,
+        [userData.username, userData.birth, userData.email, userData.password, userData.gender])
+    console.log('user added')
+}
+exports.connect = connect;
+exports.addUser = addUser;
+exports.getByUsername = getByUsername;
+exports.isEmailUsed = isEmailUsed;
+exports.getPassword = getPassword;
