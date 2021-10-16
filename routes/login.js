@@ -1,19 +1,20 @@
 const express = require("express");
 const sessions = require('express-session');
 const login=express.Router();
-const usersDB=require('../models/usersDB');
-login.post('/', (req, res) => {
+const usersDB=require('../models/users');
+const bcrypt=require('bcrypt')
+login.post('/',async (req, res) => {
     try {
-        const user = usersDB.ofMail(req.body.email);
-        if (user != null && user.password === req.body.password) {
-            req.session.username = user.username;
-            res.redirect(`/profile/${user.username}`);
+        const [password,username] =await usersDB.getPassword(req.body.email);
+        if (password &&await bcrypt.compare(req.body.password,password)) {
+            req.session.username = username;
+            res.redirect(`/profile/${username}`);
         }
         else
             res.send('wrong email or password');
     }
     catch (err) {
-        res.send("Error in logging in" + res.req.toString());
+        res.status(500).send("Error in logging in" + err.toString());
     }
 })
 login.get('/', (req, res) => {

@@ -2,17 +2,17 @@ const express = require("express");
 const Joi = require('joi');
 const sessions = require('express-session');
 const usersRouter = express.Router();
-const usersDB = require('../models/usersDB');
+const usersDB = require('../models/users');
 
 usersRouter.post('/', async (req, res) => {
     try {
         const tst = await valdiateSignUP(req.body);
-        const emailused = usersDB.ofMail(req.body.email);
-        if (emailused != undefined)
+        const emailused =await usersDB.isEmailUsed(req.body.email);
+        if (emailused)
             res.status(301).send('email already used!');
         else {
+            await usersDB.addUser(req.body);
             req.session.username = req.body.username;
-            usersDB.addUser(req.body);
             res.redirect(`/profile/${req.body.username}`);
         }
     } catch (error) {
@@ -23,11 +23,21 @@ usersRouter.post('/', async (req, res) => {
 usersRouter.get('/', (req, res) => {
     res.send(usersDB.DB);
 })
-usersRouter.get('/:username', (req, res) => {
-    const user = usersDB.ofUsername(req.params.username);
+usersRouter.get('/:username',async (req, res) => {
+    const user = await usersDB.getByUsername(req.params.username);
     if (user == null)
         res.status(404).end();
     res.send(user);
+})
+usersRouter.get('/log/:username',async(req,res)=>{
+    //try {
+        let log=await usersDB.getLog(req.params.username)
+        res.send(log)
+   // }// catch (err) {
+       // console.log(err);
+     //   throw err;
+      // res.status(500).send(err.toString());   
+   // }
 })
 async function valdiateSignUP(data) {
     const schema = Joi.object({

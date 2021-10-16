@@ -6,7 +6,8 @@
 <link rel="stylesheet" href="/styles/mainStyle.css">
 <title>ConvFourier</title>
 <div style="text-align: center;">
-    <h2>ConvFourier</h2><hr>
+    <h2>ConvFourier</h2>
+    <hr>
 </div>
 </head>
 
@@ -27,7 +28,7 @@
             <label for="female">Female </label>
             <input type="radio" id="female" name="gender" value="female"><br><br>
             <label>data of birth </label>
-            <input type="date" id="birth" name="birth" max="2017-12-31"><br><br>
+            <input type="date" id="birth" name="birth" value='1998-08-12' max="2017-12-31"><br><br>
             <input type="submit" value="Sign up">
             <input type="button" onclick="postData()" value="fetch">
         </form>
@@ -56,9 +57,9 @@
             if (!res.ok)
                 document.getElementById("status").innerText += await res.text();
             else
-             window.location.href='/profile/'+data.username;
+                window.location.href = '/profile/' + data.username;
         } catch (error) {
-            document.body.innerHTML  += "network error :" + error.toString();
+            document.body.innerHTML += "network error :" + error.toString();
         }
     }
 
