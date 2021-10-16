@@ -2,7 +2,7 @@ const express = require("express");
 const Joi = require('joi');
 const sessions = require('express-session');
 const usersRouter = express.Router();
-const usersDB = require('../models/usersDB');
+const usersDB = require('../models/users');
 
 usersRouter.post('/', async (req, res) => {
     try {
@@ -28,6 +28,16 @@ usersRouter.get('/:username',async (req, res) => {
     if (user == null)
         res.status(404).end();
     res.send(user);
+})
+usersRouter.get('/log/:username',async(req,res)=>{
+    //try {
+        let log=await usersDB.getLog(req.params.username)
+        res.send(log)
+   // }// catch (err) {
+       // console.log(err);
+     //   throw err;
+      // res.status(500).send(err.toString());   
+   // }
 })
 async function valdiateSignUP(data) {
     const schema = Joi.object({

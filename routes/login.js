@@ -1,7 +1,7 @@
 const express = require("express");
 const sessions = require('express-session');
 const login=express.Router();
-const usersDB=require('../models/usersDB');
+const usersDB=require('../models/users');
 const bcrypt=require('bcrypt')
 login.post('/',async (req, res) => {
     try {
@@ -14,7 +14,7 @@ login.post('/',async (req, res) => {
             res.send('wrong email or password');
     }
     catch (err) {
-        res.send("Error in logging in" + err.toString());
+        res.status(500).send("Error in logging in" + err.toString());
     }
 })
 login.get('/', (req, res) => {
