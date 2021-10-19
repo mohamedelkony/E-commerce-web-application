@@ -1,28 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <link rel='stylesheet' href='/styles/mainStyle.css'>
+    <link rel='stylesheet' href='/styles/inventory.css'>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/images/7777.png">
-    <link rel='stylesheet' href='/styles/mainStyle.css'>
     <title>convFourier</title>
     <%- include('partials/menu.ejs')%>
 </head>
 
 <body>
-    <div style="text-align:center;">
-        <h1>welcome to convFourier</h1><br>
-        <img src="/images/convfourier_img.jpg" alt="convFourier"><br>
-        <h4>
-            <a href="/login">log in</a>
-            or 
-            <a href="/signup">Sign up</a>
-        </h4>
-        <hr>
-        <h4>
-            <a href ="/users"> show users</a>
-        </h4>
+<div id="store"></div>
 </body>
-
 </html>
+<script type='module'>
+    import {createCardHTML} from '/scripts/componentGenerator.js';
+    async function getInventoryData() {
+        const res = await fetch(`/inventory`, {
+            method: 'GET',
+        });
+        if (res.ok)
+            return await res.json();
+        else {
+            document.body.innerHTML = "<h1>Can't get data</h1>" + res.statusText;
+        }
+        return null
+    }
+    async function displayInventoryData() {
+        let data = await getInventoryData();
+        if (data == null) {
+            alert("can't get data");
+            return;
+        }
+        let innerHTML=""
+        for (let product of data) 
+             innerHTML  += createCardHTML(product, "add to cart")    
+        document.getElementById("store").innerHTML = innerHTML
+    }
+    displayInventoryData()
+</script>
+<script>
+        async function card_onclick(me) {
+        alert(me);
+        const res = await fetch('/inventory/cart', {
+            body: JSON.stringify({
+                product_id: me
+            }),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (res.ok)
+            alert('item added')
+        else {
+            alert(res.statusText+'\n'+await res.text()   )
+        }
+    }
+
+</script>

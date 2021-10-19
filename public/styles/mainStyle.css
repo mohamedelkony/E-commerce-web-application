@@ -1,13 +1,11 @@
-
 input[type='text'],
 input[type='email'],
 input[type='password'],
 input[type='button'],
 input[type='submit'],
-.cBtn
-{
-    border:1px solid #ccc;   
-    height:25px;
+.cBtn {
+    border: 1px solid #ccc;
+    height: 25px;
     width: 95%;
     margin-left: auto;
     margin-right: auto;
@@ -15,21 +13,51 @@ input[type='submit'],
     margin-bottom: 3px;
 }
 
-body{
-    font-family:  sans-serif;
+body {
+    font-family: sans-serif;
     background-color: rgb(252, 254, 255);
 }
-.cDiv{
+
+.cDiv {
     margin: auto;
-    width:300px;
+    width: 300px;
     text-align: center;
 }
-.iborder{
-    border:1px solid #ccc;
+
+.iborder {
+    border: 1px solid #ccc;
 }
-.Xtable{
-    width:90%;
-    border:1px solid #ccc;  
-    margin:auto;
-    padding:8px;
- }
+
+.Xtable {
+    width: 90%;
+    border: 1px solid #ccc;
+    margin: auto;
+    padding: 8px;
+    margin: auto;
+}
+
+.menu {
+    text-align: center;
+}
+
+.menu a:link,
+a:visited {
+    display: inline-block;
+    background-color: rgb(49, 49, 49);
+    padding: 8px 10px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    margin: auto;
+}
+
+.menu a:hover,
+a:active {
+    display: inline-block;
+    background-color: rgb(104, 104, 104);
+    padding: 8px 10px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    margin: auto;
+}

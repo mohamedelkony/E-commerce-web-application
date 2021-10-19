@@ -16,6 +16,25 @@ Connection : keep-alive
 GET http://localhost:3000/users/mohamed_elkony HTTP/1.1
 Connection : keep-alive
 
+### get inventory 
+GET http://localhost:3000/inventory HTTP/1.1
+Connection : keep-alive
+Content-Type: application/json
+
+{
+    "limit":5
+}
+
+### add product to shopping cart
+POST http://localhost:3000/inventory/cart HTTP/1.1
+Connection : keep-alive
+Content-Type: application/json
+
+{
+    "product_id":2
+}
+
+
 ###get user log
 GET http://localhost:3000/users/log/mohamed_elkony HTTP/1.1
 Connection:  keep-alive
@@ -23,6 +42,7 @@ Connection:  keep-alive
 ### go to user profile
 GET http://localhost:3000/profile/mohamed_elkony HTTP/1.1
 Connection : keep-alive
+
 
 ### new user
 POST http://127.0.0.1:3000/users HTTP/1.1
@@ -45,3 +65,13 @@ Connection : keep-alive
     "email":"omar@momar.com",
     "password":"123456789"
 }
+
+###home
+GET http://localhost:3000 HTTP/1.1
+
+
+###logout
+GET http://localhost:3000/logout HTTP/1.1
+
+
+
