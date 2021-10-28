@@ -18,6 +18,9 @@ insert into inventory(product_name,price,product_desc,quantity) values("watch","
 select * from inventory;
 select * from products_images;
 select * from sessions;
+select * from cart_item;
+# why it works ?!!!!
+delete from cart_item where product_id =12 and session_id='124';
 
 select a.id,a.product_name,a.price,a.product_desc,a.quantity,b.url,b.image_name from inventory as a left join products_images as b on a.id=b.its_product_id;
 
@@ -37,8 +40,9 @@ describe inventory;
 
 delete from products_images where id=2;
 delete from sessions where session_id="PlhuULp3-Qi8EUmhPPjzUrON-dIMQErN";
+delete  from cart_item where id>0;
 
-update products_images set url="dynamic\\3.jpg" where id=41;
+update products_images set url="\\dynamic\\4.jpg" where id=5;
 
 update inventory set product_name="Fossil" where id=4;
 
