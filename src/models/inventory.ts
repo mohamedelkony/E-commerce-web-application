@@ -24,8 +24,8 @@ export class InventoryModel {
         return res;
     }
 
-    async removeFromCart(product_id, session_id) {
-        let sql = "delete from cart_item where id=(select id from cart_item where product_id =? and session_id=?) "
-        await this.conn.execute(sql, [product_id, session_id])
+    async removeFromCart(product_id:number, session_id:string) {
+        let sql = "delete from cart_item where product_id =? and session_id=?"
+         await this.conn.execute(sql, [product_id, session_id])
     }
 }

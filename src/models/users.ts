@@ -13,7 +13,7 @@ export class UsersModel {
         this.conn = connector.connection
     }
 
-    async isEmailUsed(email) {
+    async isEmailUsed(email: string) {
         const [res, fields] = await this.conn.execute('select email from users where email=?', [email])
         if (res.length > 0)
             return true
@@ -26,7 +26,7 @@ export class UsersModel {
         return res[0]
     }
 
-    async getByUsername(username) {
+    async getByUsername(username:string ) {
         const [res, fileds] = await this.conn.execute('select username,email,gender,id,birthdate from users where username=?', [username])
         if (res.length === 0) return null
         let user:any={}

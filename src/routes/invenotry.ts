@@ -1,7 +1,8 @@
 import express from "express";
+import { Router } from "express-serve-static-core";
 import { InventoryModel } from "../models/inventory"
 export class InventoryRouter {
-    router: any;
+    router: Router;
     private model: InventoryModel;
     constructor(model: InventoryModel) {
         this.model = model
@@ -18,7 +19,7 @@ export class InventoryRouter {
         })
         this.router.post("/cart", async (req, res) => {
             if (req.session.username == undefined) {
-                res.status(401).send("please sign in first");
+                res.status(401).send("user not logged in");
                 return
             }
             await this.model.addToCart(req.body.product_id, req.session.id)
@@ -30,6 +31,11 @@ export class InventoryRouter {
             }
             let data = await this.model.getCart(req.session.id)
             res.send(data)
+        })
+        this.router.delete('/cart',async (req,res)=>{
+            if(!req.session.username) res.status(401).send('user not logged in')
+            await this.model.removeFromCart(req.body.product_id,req.sessionID)
+            res.send()
         })
     }
 }

@@ -23,8 +23,8 @@
   },
   "scripts": {
     "build": "npx tsc -p .",
-    "dev": "nodemon  -e ts  ./src/app.ts",
-    "runOnce": "npx ts-node ./src/app.ts"
+    "dev": "nodemon  -e ts ./src/app.ts",
+    "once": "npx ts-node ./src/app.ts"
   },
   "repository": {
     "type": "git",
