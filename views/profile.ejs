@@ -5,21 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="icon" href="/images/7777.png">
 <link rel="stylesheet" href="/styles/mainStyle.css">
-
+<link rel='stylesheet' href='/styles/inventory.css'>
 <title>ConvFourier</title>
 <%- include('./partials/menu')%>
     <div style="text-align: center;">
         <h3>ConvFourier</h3>
         <hr>
     </div>
-    <style>
-        a {
-            text-decoration: none;
-            padding: 15px 15px;
-            background-color: rgb(235, 241, 241);
-            margin: 0px;
-        }
-    </style>
+
     </head>
 
     <body>
@@ -44,46 +37,71 @@
                     <td id='dateofbirth'></td>
                 </tr>
             </table>
-            <button id='getLog' onclick="getLog()">show log</button>
+            <button onclick="getLog()">show log</button>
             <p id='log'></p>
         </div>
+        <div id="store"></div>
     </body>
 
 </html>
-<script>
-    async function getUserData(username) {
-        const res = await fetch(`/users/${username}`, {
-            method: 'GET'
-        });
-        if (res.ok)
-            loadData(await res.json());
-        else {
-            document.body.innerHTML = "<h1>Can't get user</h1>" + res.statusText;
-        }
-    }
-    function loadData(data) {
-        document.getElementById('username').innerHTML = data.username;
-        document.getElementById('email').innerHTML = data.email;
-        document.getElementById('gender').innerHTML = data.gender;
-        document.getElementById('dateofbirth').innerHTML = data.birth;
-    }
-    function loadLog(log) {
-        document.getElementById('log').innerText ='';
-        for (var v of log)
-            document.getElementById('log').innerText += v.value + '\n';
-    }
-    async function getLog() {
-        document.getElementById('log').innerHTML  = "<h3>Loading ...</h3>";
-        let username = window.location.pathname.split('/')[2];
-        const res = await fetch(`/users/log/${username}`, {
+<script type="module">
+    import {createCardHTML} from '/scripts/componentGenerator.js';
+    async function getCartData() {
+        document.getElementById('store').innerHTML = "<h3>Loading ...</h3>";
+        const res = await fetch(`/inventory/cart`, {
             method: 'GET'
         })
         if (res.ok)
-            loadLog(await res.json());
+            loadCartData(await res.json());
         else {
-            document.body.innerHTML = "<h1>Can't get use log</h1>" + res.statusText;
+            alert("error loading cart");
         }
     }
-    getUserData(window.location.pathname.split('/')[2]);
-  //  getLog()
+    function loadCartData(data) {
+        document.getElementById("store").innerHTML = ""
+        let innerHTML = "";
+        for (let item of data) 
+            innerHTML += createCardHTML(item,"Remove")
+        document.getElementById("store").innerHTML = innerHTML
+    }
+    getUserData(window.location.pathname.split('/')[2])
+    getCartData()
+</script>
+<script >
+async function getUserData(username) {
+    const res = await fetch(`/users/${username}`, {
+        method: 'GET'
+    });
+    if (res.ok)
+        loadUserData(await res.json());
+    else {
+        document.body.innerHTML = "<h1>Can't get user</h1>" + res.statusText;
+    }
+}
+function loadUserData(data) {
+    document.getElementById('username').innerHTML = data.username;
+    document.getElementById('email').innerHTML = data.email;
+    document.getElementById('gender').innerHTML = data.gender;
+    document.getElementById('dateofbirth').innerHTML = data.birth;
+}
+
+function loadLog(log) {
+document.getElementById('log').innerText = '';
+for (var v of log)
+document.getElementById('log').innerText += v.value + '\n';
+}
+async function getLog() {
+    document.getElementById('log').innerHTML = "<h3>Loading ...</h3>";
+    let username = window.location.pathname.split('/')[2];
+    const res = await fetch(`/users/log/${username}`, {
+        method: 'GET'
+    })
+    if (res.ok)
+        loadLog(await res.json());
+    else {
+        document.body.innerHTML = "<h1>Can't get use log</h1>" + res.statusText;
+    }
+}
+
+
 </script>
