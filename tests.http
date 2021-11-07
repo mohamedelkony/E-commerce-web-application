@@ -35,8 +35,18 @@ Content-Type: application/json
 }
 
 
+### remove product from shopping cart
+DELETE http://localhost:3000/inventory/cart HTTP/1.1
+Connection : keep-alive
+Content-Type: application/json
+
+{
+    "product_id":2
+}
+
+
 ###get user log
-GET http://localhost:3000/users/log/mohamed_elkony HTTP/1.1
+GET http://localhost:3000/users/log/45 HTTP/1.1
 Connection:  keep-alive
 
 ### go to user profile

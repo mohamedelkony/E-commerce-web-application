@@ -37,14 +37,13 @@
         }
         let innerHTML=""
         for (let product of data) 
-             innerHTML  += createCardHTML(product, "add to cart")    
+             innerHTML  += createCardHTML(product, "add to cart",'card_onclick')    
         document.getElementById("store").innerHTML = innerHTML
     }
     displayInventoryData()
 </script>
 <script>
         async function card_onclick(me) {
-        alert(me);
         const res = await fetch('/inventory/cart', {
             body: JSON.stringify({
                 product_id: me

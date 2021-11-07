@@ -41,9 +41,7 @@
             <p id='log'></p>
         </div>
         <div id="store"></div>
-    </body>
 
-</html>
 <script type="module">
     import {createCardHTML} from '/scripts/componentGenerator.js';
     async function getCartData() {
@@ -54,20 +52,21 @@
         if (res.ok)
             loadCartData(await res.json());
         else {
-            alert("error loading cart");
+            alert(`error loading cart \n${await res.statusText}\n${await res.text()}`);
         }
     }
     function loadCartData(data) {
         document.getElementById("store").innerHTML = ""
         let innerHTML = "";
         for (let item of data) 
-            innerHTML += createCardHTML(item,"Remove")
+            innerHTML += createCardHTML(item,'Remove','card_onclick')
+            
         document.getElementById("store").innerHTML = innerHTML
     }
-    getUserData(window.location.pathname.split('/')[2])
     getCartData()
 </script>
-<script >
+
+<script>
 async function getUserData(username) {
     const res = await fetch(`/users/${username}`, {
         method: 'GET'
@@ -103,5 +102,23 @@ async function getLog() {
     }
 }
 
+async function card_onclick(product_id)
+{
+    const res = await fetch(`/inventory/cart`, {
+        method: 'DELETE',
+        body:JSON.stringify({"product_id":product_id}),
+        headers:{
+                'Content-Type': 'application/json'
+            }
+    });
+    if (res.ok)
+        location.reload()    
+    else 
+        alert(await res.status+await res.statusText+await res.data);
+    
+}
+getUserData(window.location.pathname.split('/')[2])
+</script> 
+</body>
 
-</script>
+</html>

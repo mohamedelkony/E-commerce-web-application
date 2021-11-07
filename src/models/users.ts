@@ -7,13 +7,20 @@ interface user {
     email: string;
     gender: string;
 }
+class dbError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}
+
 export class UsersModel {
     conn: any = null
     constructor(connector: DBConnector) {
         this.conn = connector.connection
     }
 
-    async isEmailUsed(email) {
+    async isEmailUsed(email: string) {
         const [res, fields] = await this.conn.execute('select email from users where email=?', [email])
         if (res.length > 0)
             return true
@@ -26,10 +33,10 @@ export class UsersModel {
         return res[0]
     }
 
-    async getByUsername(username) {
+    async getByUsername(username: string) {
         const [res, fileds] = await this.conn.execute('select username,email,gender,id,birthdate from users where username=?', [username])
         if (res.length === 0) return null
-        let user:any={}
+        let user: any = {}
         user.username = res[0].username
         user.birth = res[0].birthdate
         user.id = res[0].id
@@ -51,8 +58,12 @@ export class UsersModel {
         const [res, fields] = await this.conn.execute("select id from users where username=?", [username]);
         return res[0].id;
     }
+
     async getLog(username) {
-        const [res, fileds] = await this.conn.execute("select value from logs where id=?", [await this.getID(username)]);
+        let sql = `select value from logs
+                   inner join users using (id)
+                   where username=?`;
+        const [res, fileds] = await this.conn.execute(sql, [username]);
         return res;
     }
 }
