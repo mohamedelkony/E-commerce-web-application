@@ -1,5 +1,6 @@
 import express from "express";
 import Joi from 'joi';
+import { nextTick } from "process";
 import { UsersModel } from '../models/users';
 export class UsersRouter {
     usersmodel: UsersModel;
@@ -31,18 +32,17 @@ export class UsersRouter {
         this.router.get('/:username', async (req, res) => {
             const user = await this.usersmodel.getByUsername(req.params.username);
             if (user == null)
-                res.status(404).end();
-            res.send(user);
+                res.status(404).send();
+            else
+                res.send(user);
         })
-        this.router.get('/log/:username', async (req, res) => {
-            //try {
-            let log = await this.usersmodel.getLog(req.params.username)
-            res.send(log)
-            // }// catch (err) {
-            // console.log(err);
-            //   throw err;
-            // res.status(500).send(err.toString());   
-            // }
+        this.router.get('/log/:username', async (req, res, next) => {
+            try {
+                let log = await this.usersmodel.getLog(req.params.username)
+                res.send(log)
+            } catch (err) {
+                next(err)
+            }
         })
         async function valdiateSignUP(data) {
             const schema = Joi.object({

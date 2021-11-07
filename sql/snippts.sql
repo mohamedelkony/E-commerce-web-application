@@ -19,7 +19,7 @@ select * from inventory;
 select * from products_images;
 select * from sessions;
 select * from cart_item;
-# why it works ?!!!!
+
 delete from cart_item where product_id =12 and session_id='124';
 
 select a.id,a.product_name,a.price,a.product_desc,a.quantity,b.url,b.image_name from inventory as a left join products_images as b on a.id=b.its_product_id;

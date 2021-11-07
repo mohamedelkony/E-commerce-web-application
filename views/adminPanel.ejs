@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible content=IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="/styles/mainStyle.css">
+<title>ConvFourier</title>
+<div style="text-align: center;">
+    <h2>ConvFourier</h2>
+    <hr>
+</div>
+</head>
+
+<body>
+    <div class='cDiv iborder'>
+        <form method="POST" action="/inventory" enctype="multipart/form-data">
+            <label for="product_name">product name </label>
+            <input type="text" name="product_name" id="product_name" required><br>
+            <label for="price">price </label>
+            <input type="number" id="price" name="price" required><br>
+            <label for ="product_desc">product description </label>
+            <input type='text' id="product_desc" name="product_desc"><br>
+            <label for="image">image</label>
+            <input type="file" name="image" id='image'><br>
+            <input type="submit" value="Add to inventory">
+          <!-- <input type="button" onclick="postData()" value="fetch">-->
+        </form>
+    </div>
+</body>

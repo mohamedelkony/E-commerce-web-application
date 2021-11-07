@@ -52,7 +52,7 @@
         if (res.ok)
             loadCartData(await res.json());
         else {
-            alert("error loading cart");
+            alert(`error loading cart \n${await res.statusText}\n${await res.text()}`);
         }
     }
     function loadCartData(data) {
@@ -112,12 +112,10 @@ async function card_onclick(product_id)
             }
     });
     if (res.ok)
-        {alert("deleted succsefully");
         location.reload()    
-    }
-    else {
+    else 
         alert(await res.status+await res.statusText+await res.data);
-    }
+    
 }
 getUserData(window.location.pathname.split('/')[2])
 </script> 
