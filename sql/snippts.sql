@@ -21,6 +21,7 @@ select * from sessions;
 select * from cart_item;
 
 delete from cart_item where product_id =12 and session_id='124';
+delete from cart_item where id>0;
 
 select a.id,a.product_name,a.price,a.product_desc,a.quantity,b.url,b.image_name from inventory as a left join products_images as b on a.id=b.its_product_id;
 
@@ -58,3 +59,18 @@ change  product_name product_name varchar(265);
 alter table inventory
 add foreign key(product_image_id) references products_images(id)
 on delete set null on update cascade;
+
+alter table cart_item 
+drop session_id;
+
+alter table cart_item
+drop constraint cart_item_ibfk_1;
+
+alter table cart_item 
+add foreign key (product_id) references inventory(id) on delete cascade on update cascade;
+
+alter table cart_item 
+add foreign key (user_id) references users(id) on delete cascade on update cascade;
+
+alter table cart_item
+add user_id int;

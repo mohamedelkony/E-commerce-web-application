@@ -1,36 +1,31 @@
 import express from "express";
-import { UsersModel } from '../models/users';
+import  UsersModel  from '../models/users';
 import bcrypt from 'bcrypt';
-export class LoginRouter {
+import asyncHandler from "../util/asyncHandler";
+export default class LoginRouter {
     router: any
-    usersModel: UsersModel
+    model: UsersModel
     constructor(usersmodel: UsersModel) {
-        this.usersModel = usersmodel
+        this.model = usersmodel
         this.router = express.Router()
         this.setupRouter()
     }
     private setupRouter() {
-        this.router.post('/', async (req, res) => {
-            try {
-
-                const user = await this.usersModel.getPassword(req.body.email);
+        // login user  
+        this.router.post('/',asyncHandler( async (req, res, next) => {
+                const user = await this.model.getPassword(req.body.email);
                 if (user.password && await bcrypt.compare(req.body.password, user.password)) {
-                    req.session.username = user.username;
-                    res.redirect(`/profile/${user.username}`);
+                    req.session.user_id = user.id
+                    res.redirect(`/profile/me`);
                 } else
                     res.send('wrong email or password');
-            } catch (err) {
-                res.status(500).send("Error in logging in" + err.toString());
-            }
-        })
-
+        }))
+        // get login page
         this.router.get('/', (req, res) => {
-            if (req.session.username)
-                res.redirect(`/profile/${req.session.username}`);
+            if (req.session.user_id)
+                res.redirect(`/profile/me`);
             else
                 res.render('login.ejs')
-
         })
-
     }
 }

@@ -1,7 +1,7 @@
 <div class="menu">
     <a href='/'>home</a>
-    <% if(typeof username !='undefined'){%>
-        <a href='/profile/<%=username%>'>Profile@<%=username%></a>
+    <% if(typeof user_id !='undefined'){%>
+        <a href='/profile/me'>Profile@<%=user_id%></a>
         <a href='/logout'>Logout</a>
         <%}else{%>
             <a href='/login'>Log in</a>

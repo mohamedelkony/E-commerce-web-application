@@ -55,11 +55,11 @@
                 }
             });
             if (!res.ok)
-                document.getElementById("status").innerText += await res.text();
+                alert(await res.text());
             else
-                window.location.href = '/profile/' + data.username;
+                window.location.href = '/profile/me';
         } catch (error) {
-            document.body.innerHTML += "network error :" + error.toString();
+            alert(error.toString());
         }
     }
 

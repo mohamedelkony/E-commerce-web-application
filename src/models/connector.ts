@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-export class DBConnector {
+export default class DBConnector {
     private myconnection: any = null;
     get connection() {
         if (!this.myconnection)

@@ -7,10 +7,10 @@ const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const login_1 = require("./routes/login");
 const users_1 = require("./routes/users");
-const invenotry_1 = require("./routes/invenotry");
+const invenotry_1 = __importDefault(require("./routes/invenotry"));
 const connector_1 = require("./models/connector");
 const users_2 = require("./models/users");
-const inventory_1 = require("./models/inventory");
+const inventory_1 = __importDefault(require("./models/inventory"));
 const app = (0, express_1.default)();
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
@@ -20,13 +20,14 @@ function runServer() {
     app.set('views', path_1.default.join(__dirname, '..', 'views'));
     app.set('view engine', 'ejs');
     app.use('/', express_1.default.static(path_1.default.join(__dirname, '..', 'public')));
+    app.use('/public', express_1.default.static(path_1.default.join(__dirname, '..', 'public')));
     app.use('/', express_1.default.json());
     app.use('/', express_1.default.urlencoded({ extended: false }));
     const usersModel = new users_2.UsersModel(DBconnector);
-    const inventoryModel = new inventory_1.InventoryModel(DBconnector);
+    const inventoryModel = new inventory_1.default(DBconnector);
     const usersRouter = new users_1.UsersRouter(usersModel).router;
     const loginRouter = new login_1.LoginRouter(usersModel).router;
-    const inventoryRouter = new invenotry_1.InventoryRouter(inventoryModel).router;
+    const inventoryRouter = new invenotry_1.default(inventoryModel).router;
     const sessionStore = new MySQLStore({}, DBconnector.connection);
     app.use(session({
         store: sessionStore,
@@ -69,6 +70,21 @@ function runServer() {
             res.redirect(`/profile/${req.session.username}`);
         else
             res.render('signup');
+    });
+    app.get('/adminPanel', (req, res) => {
+        res.render('adminPanel');
+    });
+    app.get('*', (req, res) => {
+        res.send(`404 kosomk ${req.path} not found `);
+    });
+    app.use(function (err, req, res, next) {
+        if (process.env.NODE_ENV === 'production') {
+            console.error(err.stack);
+            console.log(err);
+            res.status(500).send('Something broke!');
+        }
+        else
+            throw err;
     });
     app.listen(3000, function () {
         console.log(`web server started @port :3000 !`);

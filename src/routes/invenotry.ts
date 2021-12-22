@@ -1,14 +1,14 @@
 import express from "express";
-import { ParamsDictionary, Router } from "express-serve-static-core";
+import {  Router } from "express-serve-static-core";
 import InventoryModel from "../models/inventory"
 import multer from 'multer'
 import path from 'path'
-import { ParsedQs } from "qs";
+import asyncHandler from "../util/asyncHandler";
 
 export default class InventoryRouter {
-    router: Router;
-    private model: InventoryModel;
-    private upload: express.RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>
+    router: Router
+    private model: InventoryModel
+    private upload: any
     constructor(model: InventoryModel) {
         this.model = model
         this.router = express.Router()
@@ -35,38 +35,16 @@ export default class InventoryRouter {
         this.setupRouter()
     }
     private setupRouter() {
-        this.router.get("/", async (req, res) => {
+        //get inventory products
+        this.router.get("/",asyncHandler( async (req, res) => {
             let limit = 25;
             if (req.body.limit)
                 limit = req.body.limit
             let data = await this.model.getProducts(limit)
             res.send(data)
-        })
-        this.router.post("/cart", async (req, res) => {
-            if (req.session.username == undefined) {
-                res.status(401).send("user not logged in");
-                return
-            }
-            await this.model.addToCart(req.body.product_id, req.session.id)
-            res.status(200).send()
-        })
-        this.router.get("/cart", async (req, res) => {
-            if (req.session.username == undefined) {
-                res.status(401).send('user not authorized');
-                return;
-            }
-            let data = await this.model.getCart(req.session.id)
-            res.send(data)
-        })
-        this.router.delete('/cart', async (req, res, next) => {
-            try {
-                if (!req.session.username) res.status(401).send('user not logged in')
-                await this.model.removeFromCart(req.body.product_id, req.sessionID)
-                res.send()
-            } catch (err) {
-                next(err)
-            }
-        })
+        }))
+
+        //add inventory product
         this.router.post('/', (req, res, next) => {
             this.upload(req, res, async (err: any) => {
                 if (err) {

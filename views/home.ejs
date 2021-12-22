@@ -23,11 +23,11 @@
             method: 'GET',
         });
         if (res.ok)
-            return await res.json();
+            return await res.json()
         else {
             document.body.innerHTML = "<h1>Can't get data</h1>" + res.statusText;
+            return null
         }
-        return null
     }
     async function displayInventoryData() {
         let data = await getInventoryData();
@@ -44,7 +44,7 @@
 </script>
 <script>
         async function card_onclick(me) {
-        const res = await fetch('/inventory/cart', {
+        const res = await fetch('/cart', {
             body: JSON.stringify({
                 product_id: me
             }),
@@ -56,7 +56,7 @@
         if (res.ok)
             alert('item added')
         else {
-            alert(res.statusText+'\n'+await res.text()   )
+            alert(res.statusText+'\n'+await res.text())
         }
     }
 

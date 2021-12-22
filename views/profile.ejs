@@ -37,8 +37,6 @@
                     <td id='dateofbirth'></td>
                 </tr>
             </table>
-            <button onclick="getLog()">show log</button>
-            <p id='log'></p>
         </div>
         <div id="store"></div>
 
@@ -46,7 +44,7 @@
     import {createCardHTML} from '/scripts/componentGenerator.js';
     async function getCartData() {
         document.getElementById('store').innerHTML = "<h3>Loading ...</h3>";
-        const res = await fetch(`/inventory/cart`, {
+        const res = await fetch(`/cart`, {
             method: 'GET'
         })
         if (res.ok)
@@ -67,8 +65,8 @@
 </script>
 
 <script>
-async function getUserData(username) {
-    const res = await fetch(`/users/${username}`, {
+async function getUserData() {
+    const res = await fetch(`/users/me`, {
         method: 'GET'
     });
     if (res.ok)
@@ -84,27 +82,11 @@ function loadUserData(data) {
     document.getElementById('dateofbirth').innerHTML = data.birth;
 }
 
-function loadLog(log) {
-document.getElementById('log').innerText = '';
-for (var v of log)
-document.getElementById('log').innerText += v.value + '\n';
-}
-async function getLog() {
-    document.getElementById('log').innerHTML = "<h3>Loading ...</h3>";
-    let username = window.location.pathname.split('/')[2];
-    const res = await fetch(`/users/log/${username}`, {
-        method: 'GET'
-    })
-    if (res.ok)
-        loadLog(await res.json());
-    else {
-        document.body.innerHTML = "<h1>Can't get use log</h1>" + res.statusText;
-    }
-}
+
 
 async function card_onclick(product_id)
 {
-    const res = await fetch(`/inventory/cart`, {
+    const res = await fetch(`/cart`, {
         method: 'DELETE',
         body:JSON.stringify({"product_id":product_id}),
         headers:{
@@ -112,8 +94,10 @@ async function card_onclick(product_id)
             }
     });
     if (res.ok)
+    {   alert('item removed')
         location.reload()    
-    else 
+    }
+        else 
         alert(await res.status+await res.statusText+await res.data);
     
 }

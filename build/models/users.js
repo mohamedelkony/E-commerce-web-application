@@ -5,6 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersModel = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
+class dbError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}
 class UsersModel {
     constructor(connector) {
         this.conn = null;
@@ -48,7 +54,10 @@ class UsersModel {
         return res[0].id;
     }
     async getLog(username) {
-        const [res, fileds] = await this.conn.execute("select value from logs where id=?", [await this.getID(username)]);
+        let sql = `select value from logs
+                   inner join users using (id)
+                   where username=?`;
+        const [res, fileds] = await this.conn.execute(sql, [username]);
         return res;
     }
 }
