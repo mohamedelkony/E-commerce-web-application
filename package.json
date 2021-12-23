@@ -1,5 +1,5 @@
 {
-  "name": "koner_sever",
+  "name": "ecommerce_app",
   "version": "1.0.0",
   "description": "conv",
   "main": "app.js",
@@ -35,9 +35,9 @@
   },
   "scripts": {
     "build": "npx tsc -p .",
-    "dev": "nodemon  -e ts ./src/app.ts",
+    "dev": "nodemon  --watch ./src -e ts ./src/app.ts",
     "once": "npx ts-node ./src/app.ts",
-    "test": "mocha -r ts-node/register './tests/**/*.ts' --timeout 20000"
+    "tests": "mocha -r ts-node/register './tests/**/*.ts' --timeout 5000"
   },
   "repository": {
     "type": "git",

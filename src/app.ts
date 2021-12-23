@@ -21,7 +21,7 @@ let log_middleware = morgan(function (tokens, req, res) {
     else
         user = '@Annonymes'
     return [
-        user,
+        user+':'+ req.socket.remotePort,
         tokens.method(req, res),
         tokens.url(req, res),
         tokens.status(req, res),
@@ -31,7 +31,7 @@ let log_middleware = morgan(function (tokens, req, res) {
 })
 export let DBconnection
 async function run_server() {
-     DBconnection = await getDBconnection()
+    DBconnection = await getDBconnection()
     let usersModel = new UsersModel(DBconnection)
     let inventoryModel = new InventoryModel(DBconnection)
     let cartModel = new CartModel(DBconnection)
@@ -102,9 +102,11 @@ async function run_server() {
         else
             throw err
     })
-    app.listen(3000, function () {
-        console.log(`web server started @port :3000 !`);
+    if(!module.parent){
+    app.listen(3000, async function () {
+        console.log(`Web server started@localhost:3000`);
     })
+    }
 }
 
 run_server()

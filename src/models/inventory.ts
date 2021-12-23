@@ -1,5 +1,6 @@
 
 import { unlink } from 'fs/promises';
+import { json } from 'stream/consumers';
 export default class InventoryModel {
     private conn
     constructor(connection) {
@@ -28,29 +29,27 @@ export default class InventoryModel {
         await this.conn.execute(sql, [product_name, product_id])
     }
     
-    async exists(product_id: number) {
+    async getProduct(product_id: number) {
         let sql = `select * from inventory where id=?;`
-        console.log(product_id+'dddddd')
         let [res] = await this.conn.execute(sql, [product_id.toString()])
-        console.log(res)
-       if(res.length > 0)
-            return true
-        else 
-            return false
+        if(res.length > 0)
+            return  res[0]
+        return null
      }
     async edit_product_price(product_id: number, price: number) {
         let sql = `update inventory set price=? where id=?;`
         await this.conn.execute(sql, [price, product_id])
     }
     async delete_product(product_id: number) {
+    
         let image_uri_sql = `select url from products_images where its_product_id=?;`
         try {
             let [res] = await this.conn.execute(image_uri_sql, [product_id])
-            let image_uri = res[0].uri
+            let image_uri:string = res[0].url
             /* erase appended forward slash from uri
                 because it is save as "/public/dynamic/image_name.jpg"
             */
-            image_uri = image_uri.substring(1, image_uri.length())
+            image_uri = image_uri.substring(1, image_uri.length)
             await unlink(image_uri)
         } catch (err) {
             console.log(err + 'product image deletion error')
