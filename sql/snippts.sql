@@ -44,7 +44,6 @@ delete from sessions where session_id="PlhuULp3-Qi8EUmhPPjzUrON-dIMQErN";
 delete  from cart_item where id>0;
 
 update products_images set url="\\dynamic\\4.jpg" where id=5;
-
 update inventory set product_name="Fossil" where id=4;
 
 alter table inventory

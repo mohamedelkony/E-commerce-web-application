@@ -6,11 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
+const asyncHandler_1 = __importDefault(require("../util/asyncHandler"));
 class InventoryRouter {
     constructor(model) {
         this.model = model;
         this.router = express_1.default.Router();
-        const storage = multer_1.default.diskStorage({
+        //setup multer 
+        const image_storage = multer_1.default.diskStorage({
             destination: function (req, file, cb) {
                 cb(null, './public/dynamic');
             }, filename: function (req, file, cb) {
@@ -19,9 +21,9 @@ class InventoryRouter {
             }
         });
         this.upload = (0, multer_1.default)({
-            storage: storage,
+            storage: image_storage,
             fileFilter: function (req, file, cb) {
-                var ext = path_1.default.extname(file.originalname);
+                var ext = path_1.default.extname(file.originalname).toLowerCase();
                 if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
                     return cb(new Error('Only images are allowed'));
                 }
@@ -33,40 +35,15 @@ class InventoryRouter {
         this.setupRouter();
     }
     setupRouter() {
-        this.router.get("/", async (req, res) => {
+        //get inventory products
+        this.router.get("/", (0, asyncHandler_1.default)(async (req, res) => {
             let limit = 25;
             if (req.body.limit)
                 limit = req.body.limit;
-            let data = await this.model.getProducts(limit);
+            let data = await this.model.get_products(limit);
             res.send(data);
-        });
-        this.router.post("/cart", async (req, res) => {
-            if (req.session.username == undefined) {
-                res.status(401).send("user not logged in");
-                return;
-            }
-            await this.model.addToCart(req.body.product_id, req.session.id);
-            res.status(200).send();
-        });
-        this.router.get("/cart", async (req, res) => {
-            if (req.session.username == undefined) {
-                res.status(401).send('user not authorized');
-                return;
-            }
-            let data = await this.model.getCart(req.session.id);
-            res.send(data);
-        });
-        this.router.delete('/cart', async (req, res, next) => {
-            try {
-                if (!req.session.username)
-                    res.status(401).send('user not logged in');
-                await this.model.removeFromCart(req.body.product_id, req.sessionID);
-                res.send();
-            }
-            catch (err) {
-                next(err);
-            }
-        });
+        }));
+        //add inventory product
         this.router.post('/', (req, res, next) => {
             this.upload(req, res, async (err) => {
                 if (err) {
@@ -74,7 +51,7 @@ class InventoryRouter {
                 }
                 else {
                     try {
-                        await this.model.addProduct(req.body.product_name, req.body.price, req.body.product_desc, req.file.path);
+                        await this.model.add_product(req.body.product_name, req.body.price, req.body.product_desc, req.file.path);
                         res.redirect(`/adminpanel`);
                     }
                     catch (err) {
@@ -83,6 +60,18 @@ class InventoryRouter {
                 }
             });
         });
+        //edit product name
+        this.router.put('/name', (0, asyncHandler_1.default)(async (req, res) => {
+            await this.model.edit_product_price(req.body.product_id, req.body.product_name);
+        }));
+        //edit product price
+        this.router.put('/price', (0, asyncHandler_1.default)(async (req, res) => {
+            await this.model.edit_product_price(req.body.product_id, req.body.price);
+        }));
+        //edit price name
+        this.router.delete('/', (0, asyncHandler_1.default)(async (req, res) => {
+            await this.model.delete_product(req.body.product_id);
+        }));
     }
 }
 exports.default = InventoryRouter;

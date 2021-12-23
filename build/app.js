@@ -5,69 +5,81 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
-const login_1 = require("./routes/login");
-const users_1 = require("./routes/users");
+const login_1 = __importDefault(require("./routes/login"));
+const users_1 = __importDefault(require("./routes/users"));
 const invenotry_1 = __importDefault(require("./routes/invenotry"));
-const connector_1 = require("./models/connector");
-const users_2 = require("./models/users");
+const connector_1 = __importDefault(require("./models/connector"));
+const users_2 = __importDefault(require("./models/users"));
 const inventory_1 = __importDefault(require("./models/inventory"));
-const app = (0, express_1.default)();
-var session = require('express-session');
-var MySQLStore = require('express-mysql-session')(session);
-const DBconnector = new connector_1.DBConnector();
+const cart_1 = __importDefault(require("./routes/cart"));
+const cart_2 = __importDefault(require("./models/cart"));
+const morgan_1 = __importDefault(require("morgan"));
+let app = (0, express_1.default)();
+let session = require('express-session');
+let MySQLStore = require('express-mysql-session')(session);
+let DBconnector = new connector_1.default();
+let log_middleware = (0, morgan_1.default)(function (tokens, req, res) {
+    let user;
+    if (req.session)
+        user = '@' + (req.session.user_id === undefined ? 'Annonymes' : req.session.user_id);
+    else
+        user = '@Annonymes';
+    return [
+        user,
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'), '-',
+        tokens['response-time'](req, res), 'ms'
+    ].join(' ');
+});
 DBconnector.connect(runServer);
 function runServer() {
+    let usersModel = new users_2.default(DBconnector);
+    let inventoryModel = new inventory_1.default(DBconnector);
+    let cartModel = new cart_2.default(DBconnector);
+    let usersRouter = new users_1.default(usersModel).router;
+    let loginRouter = new login_1.default(usersModel).router;
+    let inventoryRouter = new invenotry_1.default(inventoryModel).router;
+    let cartRouter = new cart_1.default(cartModel).router;
+    let sessionStore = new MySQLStore({}, DBconnector.connection);
     app.set('views', path_1.default.join(__dirname, '..', 'views'));
     app.set('view engine', 'ejs');
     app.use('/', express_1.default.static(path_1.default.join(__dirname, '..', 'public')));
     app.use('/public', express_1.default.static(path_1.default.join(__dirname, '..', 'public')));
     app.use('/', express_1.default.json());
     app.use('/', express_1.default.urlencoded({ extended: false }));
-    const usersModel = new users_2.UsersModel(DBconnector);
-    const inventoryModel = new inventory_1.default(DBconnector);
-    const usersRouter = new users_1.UsersRouter(usersModel).router;
-    const loginRouter = new login_1.LoginRouter(usersModel).router;
-    const inventoryRouter = new invenotry_1.default(inventoryModel).router;
-    const sessionStore = new MySQLStore({}, DBconnector.connection);
     app.use(session({
         store: sessionStore,
         secret: '3zq29H165a0sdasx9zabtkhgfbdfs8y7c5',
         resave: false,
         saveUninitialized: false,
-        cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 /*7 days*/ }
+        cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 /* 7 days */ }
     }));
+    if (process.env.NODE_ENV !== 'test')
+        app.use(log_middleware);
     app.use('/users', usersRouter);
     app.use('/login', loginRouter);
     app.use('/inventory', inventoryRouter);
-    app.use('/', async (req, res, next) => {
-        try {
-            if ('username' in req.session)
-                await usersModel.log(req.session.username, req.path + ' @' + new Date().toLocaleTimeString());
-            next();
-        }
-        catch (err) {
-            res.send(err.toString());
-            throw err;
-        }
-    });
+    app.use('/cart', cartRouter);
     app.get('/', (req, res) => {
-        res.render('home.ejs', { username: req.session.username });
+        res.render('home.ejs', { user_id: req.session.user_id });
     });
     app.get('/logout', (req, res) => {
-        if (req.session.username)
+        if (req.session.user_id)
             req.session.destroy((err) => {
                 if (err)
-                    res.status(500).send(`error can't logout`);
+                    res.status(500).send(`error while logout`);
                 else
                     res.redirect('/');
             });
     });
-    app.get('/profile/:username', (req, res) => {
-        res.render('profile', { username: req.session.username });
+    app.get('/profile/me', (req, res) => {
+        res.render('profile', { user_id: req.session.user_id });
     });
     app.get('/signup', (req, res) => {
-        if (req.session.username !== undefined)
-            res.redirect(`/profile/${req.session.username}`);
+        if (req.session.user_id !== undefined)
+            res.redirect(`/profile/${req.session.user_id}`);
         else
             res.render('signup');
     });
@@ -75,7 +87,7 @@ function runServer() {
         res.render('adminPanel');
     });
     app.get('*', (req, res) => {
-        res.send(`404 kosomk ${req.path} not found `);
+        res.send(`404 error kosomk ${req.path} not found `);
     });
     app.use(function (err, req, res, next) {
         if (process.env.NODE_ENV === 'production') {
@@ -90,3 +102,4 @@ function runServer() {
         console.log(`web server started @port :3000 !`);
     });
 }
+exports.default = app; //for testing

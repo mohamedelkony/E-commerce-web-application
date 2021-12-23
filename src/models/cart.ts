@@ -1,8 +1,8 @@
-import  DBConnector  from './connector'
+
 export default class CartModel {
     private conn
-    constructor(connector: DBConnector) {
-        this.conn = connector.connection
+    constructor(connection) {
+        this.conn = connection
     }
     async addToCart(product_id:number, user_id:number ){
         let sql = "insert into cart_item(product_id,user_id) values (?,?)"

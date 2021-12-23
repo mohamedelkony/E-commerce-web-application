@@ -1,10 +1,11 @@
-import  DBConnector  from './connector'
+
+import { unlink } from 'fs/promises';
 export default class InventoryModel {
-    private conn: any = null
-    constructor(connector: DBConnector) {
-        this.conn = connector.connection
+    private conn
+    constructor(connection) {
+        this.conn = connection
     }
-    async getProducts(limit) {
+    async get_products(limit) {
         let thisLimit = limit;
         if (limit == undefined || limit == null)
             thisLimit = 10;
@@ -13,14 +14,50 @@ export default class InventoryModel {
         return res;
     }
 
-     async addProduct(name,price,desc,image_url)
-    {
-        let sql=`insert into inventory(product_name,price,product_desc) values(?,?,?)`;
-        let[res]=await this.conn.execute(sql,[name,price.toString(),desc])
-        let[res2]=await this.conn.execute('select last_insert_id() as id')
-        let image_sql='insert into products_images(url,its_product_id,image_name) values(?,?,?)';
+    async add_product(name, price, desc, image_url) {
+        let sql = `insert into inventory(product_name,price,product_desc) values(?,?,?)`;
+        let [res] = await this.conn.execute(sql, [name, price.toString(), desc])
+        let [res2] = await this.conn.execute('select last_insert_id() as id')
+        let image_sql = 'insert into products_images(url,its_product_id,image_name) values(?,?,?)';
         // added '/ to image uri so it can be accessd from any page e.g. /public/dynamic/image.png
-        let[res3]=await this.conn.execute(image_sql,['/'+image_url,res2[0].id,null])
+        let [res3] = await this.conn.execute(image_sql, ['/' + image_url, res2[0].id, null])
+        return res2[0].id
+    }
+    async edit_product_name(product_id: number, product_name: string) {
+        let sql = `update inventory set product_name=? where id=?;`
+        await this.conn.execute(sql, [product_name, product_id])
+    }
+    
+    async exists(product_id: number) {
+        let sql = `select * from inventory where id=?;`
+        console.log(product_id+'dddddd')
+        let [res] = await this.conn.execute(sql, [product_id.toString()])
+        console.log(res)
+       if(res.length > 0)
+            return true
+        else 
+            return false
+     }
+    async edit_product_price(product_id: number, price: number) {
+        let sql = `update inventory set price=? where id=?;`
+        await this.conn.execute(sql, [price, product_id])
+    }
+    async delete_product(product_id: number) {
+        let image_uri_sql = `select url from products_images where its_product_id=?;`
+        try {
+            let [res] = await this.conn.execute(image_uri_sql, [product_id])
+            let image_uri = res[0].uri
+            /* erase appended forward slash from uri
+                because it is save as "/public/dynamic/image_name.jpg"
+            */
+            image_uri = image_uri.substring(1, image_uri.length())
+            await unlink(image_uri)
+        } catch (err) {
+            console.log(err + 'product image deletion error')
+        }
+        let sql = `delete from inventory  where id=?;`
+        await this.conn.execute(sql, [product_id])
+
     }
 
 }

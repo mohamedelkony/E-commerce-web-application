@@ -3,7 +3,7 @@ import { Router } from "express-serve-static-core";
 import asyncHandler from '../util/asyncHandler'
 import CartModel from "../models/cart"
 
-export default class CartRouter {
+export default class CartRouter  {
     router: Router
     private model: CartModel
     constructor(model: CartModel) {
@@ -19,7 +19,7 @@ export default class CartRouter {
                 return
             }
             await this.model.addToCart(req.body.product_id, req.session.user_id)
-            res.status(200).send()
+            res.status(201).send()
         }))
 
         // get cart item

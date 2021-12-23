@@ -12,7 +12,8 @@ export default class InventoryRouter {
     constructor(model: InventoryModel) {
         this.model = model
         this.router = express.Router()
-        const storage = multer.diskStorage({
+        //setup multer 
+        const image_storage = multer.diskStorage({
             destination: function (req, file, cb) {
                 cb(null,'./public/dynamic')
             }, filename: function (req, file, cb) {
@@ -21,9 +22,9 @@ export default class InventoryRouter {
             }
         })
         this.upload = multer({
-            storage: storage,
+            storage: image_storage,
             fileFilter: function (req, file, cb) {
-                var ext = path.extname(file.originalname);
+                var ext = path.extname(file.originalname).toLowerCase();
                 if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
                     return cb(new Error('Only images are allowed'))
                 }
@@ -35,12 +36,13 @@ export default class InventoryRouter {
         this.setupRouter()
     }
     private setupRouter() {
+
         //get inventory products
         this.router.get("/",asyncHandler( async (req, res) => {
             let limit = 25;
             if (req.body.limit)
                 limit = req.body.limit
-            let data = await this.model.getProducts(limit)
+            let data = await this.model.get_products(limit)
             res.send(data)
         }))
 
@@ -52,8 +54,9 @@ export default class InventoryRouter {
                 }
                 else {
                     try {
-                        await this.model.addProduct(req.body.product_name, req.body.price, req.body.product_desc, req.file.path)
-                        res.redirect(`/adminpanel`);
+                        let id=await this.model.add_product(req.body.product_name, req.body.price, req.body.product_desc, req.file.path)
+                        res.send({'id':id})
+                        //res.redirect(`/adminpanel`);
                     }
                     catch (err) {
                         next(err)
@@ -61,5 +64,26 @@ export default class InventoryRouter {
                 }
             })
         })
+
+
+
+        //edit product name
+        this.router.put('/name',asyncHandler(async(req,res)=>{
+            await this.model.edit_product_price(req.body.product_id,req.body.product_name)
+        }))
+
+        //edit product price
+        this.router.put('/price',asyncHandler(async(req,res)=>{
+            await this.model.edit_product_price(req.body.product_id,req.body.price)
+        }))
+
+        //edit price name
+        this.router.delete('/',asyncHandler(async(req,res)=>{
+            
+            await this.model.delete_product(req.body.product_id)
+
+        }))
+
+        
     }
 }

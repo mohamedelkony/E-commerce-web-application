@@ -1,10 +1,9 @@
 import bcrypt from 'bcrypt';
-import  DBConnector  from './connector'
 
 export default class UsersModel {
-    conn: any = null
-    constructor(connector: DBConnector) {
-        this.conn = connector.connection
+    conn = null
+    constructor(connection) {
+        this.conn = connection
     }
 
     async isEmailUsed(email: string) {

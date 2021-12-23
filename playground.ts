@@ -1,4 +1,4 @@
-f/*
+/*
 try catch in async code still can fire errors
 if the awaited promise is fireing another promise
 */
@@ -27,7 +27,7 @@ function start_promise() {
             }, rand);
         })}
     
-    async function test() {
+    async function test1() {
         try {
             let res =await start_promise()
             console.log('succes:'+res)
@@ -35,4 +35,4 @@ function start_promise() {
             console.log('error :'+err)
         }
     }
-    test()
+    test1()
