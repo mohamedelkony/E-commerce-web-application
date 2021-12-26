@@ -20,13 +20,14 @@ let log_middleware = morgan(function (tokens, req, res) {
         user = '@' + (req.session.user_id === undefined ? 'Annonymes' : req.session.user_id);
     else
         user = '@Annonymes'
+
     return [
         user+':'+ req.socket.remotePort,
         tokens.method(req, res),
         tokens.url(req, res),
         tokens.status(req, res),
         tokens.res(req, res, 'content-length'), '-',
-        tokens['response-time'](req, res), 'ms'
+        tokens['response-time'](req, res), 'ms',
     ].join(' ')
 })
 export let DBconnection
@@ -92,7 +93,7 @@ async function run_server() {
     app.get('*', (req, res) => {
         res.send(`404 error kosomk ${req.path} not found `)
     })
-
+    
     app.use(function (err, req, res, next) {
         if (process.env.NODE_ENV === 'production') {
             console.error(err.stack)

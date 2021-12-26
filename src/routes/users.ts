@@ -22,12 +22,13 @@ export default class UsersRouter {
         return schema.validateAsync(data);
     }
     private setupRouter() {
-        //POST user
+        //POST /user
         this.router.post('/', asyncHandler(async (req, res) => {
             try {
                 const tst = await this.valdiateSignUP(req.body);
             } catch (error) {
                 res.status(400).send('form data not valid:' + error.toString());
+                console.log('form data not valid:' + error.toString())
                 return
             }
             const emailused = await this.model.isEmailUsed(req.body.email);
@@ -36,11 +37,11 @@ export default class UsersRouter {
             else {
                 await this.model.addUser(req.body)
                 req.session.user_id = await this.model.getID(req.body.email)
-                res.redirect(`/profile/me`);
+                res.send({ 'user_id': req.session.user_id })
             }
         }))
 
-        //GET user
+        //GET /user
         this.router.get('/:user_id', asyncHandler(async (req, res) => {
             if (req.params.user_id === 'me') {
                 if (req.session.user_id) {
@@ -51,11 +52,11 @@ export default class UsersRouter {
                     res.status(403).send()
                 return
             }
-            const user = await this.model.getbyID(req.params.user_id);
-            if (user == null)
-                res.status(404).send();
+            const user = await this.model.getbyID(req.params.user_id)
+            if (user === null)
+                res.status(404).send()
             else
-                res.send(user);
+                res.send(user)
         }))
     }
 }

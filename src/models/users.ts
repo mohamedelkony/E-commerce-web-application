@@ -32,15 +32,9 @@ export default class UsersModel {
     }
 
     async getbyID(user_id: number) {
-        const [res] = await this.conn.execute('select username,email,gender,id,birthdate from users where id=?', [user_id])
+        const [res] = await this.conn.execute('select id as user_id,username,email,gender,birthdate as birth from users where id=?', [user_id])
         if (res.length === 0) return null
-        let user: any = {}
-        user.username = res[0].username
-        user.birth = res[0].birthdate
-        user.id = res[0].id
-        user.email = res[0].email
-        user.gender = res[0].gender
-        return user;
+        return res[0];
     }
     async addUser(userData) {
         userData.password = await bcrypt.hash(userData.password, 10)
