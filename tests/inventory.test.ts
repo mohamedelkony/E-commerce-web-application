@@ -4,12 +4,13 @@ import chaiHttp from 'chai-http'
 import chai from 'chai'
 import { DBconnection } from '../src/app'
 import InventoryModel from '../src/models/inventory'
+import {getDBconnection_sync} from '../src/util/getDBconnection'
 
 let expect = chai.expect
 chai.use(chaiHttp)
 
 let url = 'http://127.0.0.1:3000'
-
+let test_conn=getDBconnection_sync()
 
 describe('/inventory API', () => {
     it('gets products(25max)', (done) => {
@@ -30,7 +31,7 @@ describe('/inventory API', () => {
             .attach('image', './public/er.jpeg')
             .end((err, res) => {
                 expect(res).have.status(200)
-                id = res.body.id
+                id = res.body.product_id
                 done()
             })
     })
@@ -56,6 +57,35 @@ describe('/inventory API', () => {
                 done(err)
             })
     })
+    it('edits product name',(done)=>{
+        chai.request(url)
+            .put('/inventory/name')
+            .send({
+                'product_id':id,
+                'product_name':'new name'
+            })
+            .then((res)=>{
+                expect(res).have.status(200)
+                expect(res.body).to.have.property('product_id',id)
+                expect(res.body).to.have.property('product_name','new name') 
+                done()
+            })
+            .catch((err)=>{
+                done(err)
+            })
+    })
+    
+    it('verfies product name changed',(done)=>{
+         test_conn.execute('select product_name from inventory where id=?',[id],
+         function(err, res, fields) {
+            if(err)done(err)
+            expect(res).to.not.be.null
+            expect(res).to.have.property('length',1)
+            expect(res[0]).to.have.property('product_name','new name')
+            done()
+         })
+    })
+    
     it('deletes just added product', (done) => {
         chai.request(url)
             .delete('/inventory')

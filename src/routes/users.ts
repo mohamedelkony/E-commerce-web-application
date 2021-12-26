@@ -1,7 +1,7 @@
 import express from "express";
 import Joi from 'joi';
 import asyncHandler from "../util/asyncHandler";
-import  UsersModel  from '../models/users';
+import UsersModel from '../models/users';
 export default class UsersRouter {
     model: UsersModel;
     router: any;
@@ -10,13 +10,24 @@ export default class UsersRouter {
         this.router = express.Router();
         this.setupRouter();
     }
+    private async valdiateSignUP(data) {
+        const schema = Joi.object({
+            username: Joi.string().token().max(25).required(),
+            password: Joi.string().min(3).max(300).required(),
+            gender: Joi.string().valid('male', 'female').required(),
+            email: Joi.string().email().required(),
+            birth: Joi.date().required(),
+            repassword: Joi.ref('password')
+        });
+        return schema.validateAsync(data);
+    }
     private setupRouter() {
-        //add user
+        //POST user
         this.router.post('/', asyncHandler(async (req, res) => {
             try {
-                const tst = await valdiateSignUP(req.body);
+                const tst = await this.valdiateSignUP(req.body);
             } catch (error) {
-                res.status(400).send('form data not valid:'+error.toString());
+                res.status(400).send('form data not valid:' + error.toString());
                 return
             }
             const emailused = await this.model.isEmailUsed(req.body.email);
@@ -24,13 +35,13 @@ export default class UsersRouter {
                 res.status(301).send('email already used!');
             else {
                 await this.model.addUser(req.body)
-                req.session.user_id = await this.model.getID(req.username)
-                res.redirect(`/profile/${req.session.user_id}`);
+                req.session.user_id = await this.model.getID(req.body.email)
+                res.redirect(`/profile/me`);
             }
         }))
 
-        //get user
-        this.router.get('/:user_id',asyncHandler(async (req, res) => {
+        //GET user
+        this.router.get('/:user_id', asyncHandler(async (req, res) => {
             if (req.params.user_id === 'me') {
                 if (req.session.user_id) {
                     const user = await this.model.getbyID(req.session.user_id)
@@ -46,17 +57,5 @@ export default class UsersRouter {
             else
                 res.send(user);
         }))
-
-        async function valdiateSignUP(data) {
-            const schema = Joi.object({
-                username: Joi.string().token().max(25).required(),
-                password: Joi.string().min(3).max(300).required(),
-                gender: Joi.string().valid('male', 'female').required(),
-                email: Joi.string().email().required(),
-                birth: Joi.date().required(),
-                repassword: Joi.ref('password')
-            });
-            return schema.validateAsync(data);
-        }
     }
 }

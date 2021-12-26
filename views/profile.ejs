@@ -76,10 +76,10 @@ async function getUserData() {
     }
 }
 function loadUserData(data) {
-    document.getElementById('username').innerHTML = data.username;
-    document.getElementById('email').innerHTML = data.email;
-    document.getElementById('gender').innerHTML = data.gender;
-    document.getElementById('dateofbirth').innerHTML = data.birth;
+    document.getElementById('username').innerText = data.username;
+    document.getElementById('email').innerText = data.email;
+    document.getElementById('gender').innerText = data.gender;
+    document.getElementById('dateofbirth').innerText = data.birth;
 }
 
 

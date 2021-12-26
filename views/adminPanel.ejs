@@ -13,17 +13,32 @@
 
 <body>
     <div class='cDiv iborder'>
-        <form method="POST" action="/inventory" enctype="multipart/form-data">
+        <form method="POST" action="/inventory" enctype="multipart/form-data" id='add_form'>
             <label for="product_name">product name </label>
             <input type="text" name="product_name" id="product_name" required><br>
             <label for="price">price </label>
             <input type="number" id="price" name="price" required><br>
-            <label for ="product_desc">product description </label>
+            <label for="product_desc">product description </label>
             <input type='text' id="product_desc" name="product_desc"><br>
             <label for="image">image</label>
             <input type="file" name="image" id='image'><br>
-            <input type="submit" value="Add to inventory">
-          <!-- <input type="button" onclick="postData()" value="fetch">-->
+            <input type="button" onclick="postData()" value="Add">
         </form>
     </div>
+    <script>
+        async function postData() {
+            let myForm = document.getElementById('add_form')
+            let formData = new FormData(myForm)
+            const res = await fetch('/inventory', {
+                method: 'POST',
+                body: formData
+            })
+            if (res.ok) {I
+                let body=await res.json()
+                alert(`product added (id:${body.product_id})`)
+            }
+            else
+                alert('Error ' + await res.text())
+        }
+    </script>
 </body>

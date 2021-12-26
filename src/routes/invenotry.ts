@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import { Router } from "express-serve-static-core";
 import InventoryModel from "../models/inventory"
 import multer from 'multer'
@@ -55,8 +55,7 @@ export default class InventoryRouter {
                 else {
                     try {
                         let id = await this.model.add_product(req.body.product_name, req.body.price, req.body.product_desc, req.file.path)
-                        res.send({ 'id': id })
-                        //res.redirect(`/adminpanel`);
+                        res.send({'product_id':id});
                     }
                     catch (err) {
                         next(err)
@@ -67,7 +66,7 @@ export default class InventoryRouter {
 
         //edit product name
         this.router.put('/name', asyncHandler(async (req, res) => {
-            await this.model.edit_product_price(req.body.product_id, req.body.product_name)
+            await this.model.edit_product_name(req.body.product_id, req.body.product_name)
             res.send({
                 'product_id': req.body.product_id,
                 'product_name': req.body.product_name

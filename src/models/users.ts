@@ -32,7 +32,7 @@ export default class UsersModel {
     }
 
     async getbyID(user_id: number) {
-        const [res] = await this.conn.execute('select username,email,gender,id,birthdate from users where id=?', [user_id.toString()])
+        const [res] = await this.conn.execute('select username,email,gender,id,birthdate from users where id=?', [user_id])
         if (res.length === 0) return null
         let user: any = {}
         user.username = res[0].username
@@ -45,21 +45,9 @@ export default class UsersModel {
     async addUser(userData) {
         userData.password = await bcrypt.hash(userData.password, 10)
         const [res] = await this.conn.execute(`insert into users(username,birthdate,email,password,gender) values(?,?,?,?,?)`, [userData.username, userData.birth, userData.email, userData.password, userData.gender])
-        console.log('user added')
     }
-    async log(username, value) {
-        await this.conn.execute("insert into logs(id,value) values((select id from users where username=?),?)", [username, value]);
-    }
-    async getID(username) {
-        const [res] = await this.conn.execute("select id from users where username=?", [username]);
+    async getID(email) {
+        const [res] = await this.conn.execute("select id from users where email=?", [email]);
         return res[0].id;
-    }
-
-    async getLog(username) {
-        let sql = `select value from logs
-                   inner join users using (id)
-                   where username=?`;
-        const [res] = await this.conn.execute(sql, [username]);
-        return res;
     }
 }
