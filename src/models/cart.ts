@@ -14,7 +14,6 @@ export default class CartModel {
         return res;
     }
     async removeFromCart(product_id: number, user_id: number) {
-       
             let sql = "delete from cart_item where product_id =? and user_id=?"
             await this.conn.execute(sql, [product_id, user_id])
       

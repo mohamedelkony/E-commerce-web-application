@@ -1,18 +1,18 @@
-import express, { urlencoded } from "express";
+import express from "express";
 import { Router } from "express-serve-static-core";
 import InventoryModel from "../models/inventory"
 import multer from 'multer'
 import path from 'path'
 import asyncHandler from "../util/asyncHandler";
 
-export default class InventoryRouter {
+export default class InventoryController {
     router: Router
     private model: InventoryModel
     private upload: any
-    constructor(model: InventoryModel) {
-        this.model = model
+    constructor(connection) {
+        this.model = new InventoryModel(connection)
         this.router = express.Router()
-        //setup multer 
+        //setup multer image storage
         const image_storage = multer.diskStorage({
             destination: function (req, file, cb) {
                 cb(null, './public/dynamic')
@@ -21,6 +21,7 @@ export default class InventoryRouter {
                 cb(null, datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1])
             }
         })
+        //setup multer
         this.upload = multer({
             storage: image_storage,
             fileFilter: function (req, file, cb) {
@@ -33,9 +34,6 @@ export default class InventoryRouter {
                 fileSize: 5 * 1024 * 1024
             }
         }).single('image')
-        this.setupRouter()
-    }
-    private setupRouter() {
 
         //get inventory products
         this.router.get("/", asyncHandler(async (req, res) => {
@@ -55,7 +53,7 @@ export default class InventoryRouter {
                 else {
                     try {
                         let id = await this.model.add_product(req.body.product_name, req.body.price, req.body.product_desc, req.file.path)
-                        res.send({'product_id':id});
+                        res.send({ 'product_id': id });
                     }
                     catch (err) {
                         next(err)
@@ -89,7 +87,5 @@ export default class InventoryRouter {
                 'product_id': req.body.product_id
             })
         }))
-
-
     }
 }

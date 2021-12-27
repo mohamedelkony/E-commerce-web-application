@@ -33,7 +33,7 @@
                 method: 'POST',
                 body: formData
             })
-            if (res.ok) {I
+            if (res.ok) {
                 let body=await res.json()
                 alert(`product added (id:${body.product_id})`)
             }

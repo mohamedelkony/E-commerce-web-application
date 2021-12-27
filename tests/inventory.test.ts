@@ -2,15 +2,15 @@ process.env.NODE_ENV = 'test'
 
 import chaiHttp from 'chai-http'
 import chai from 'chai'
-import { DBconnection } from '../src/app'
+import { DBPool } from '../src/app'
 import InventoryModel from '../src/models/inventory'
-import {getDBconnection_sync} from '../src/util/getDBconnection'
+import {getSyncDBPool} from '../src/util/DBconnetor'
 
 let expect = chai.expect
 chai.use(chaiHttp)
 
 let url = 'http://127.0.0.1:3000'
-let test_conn=getDBconnection_sync()
+let test_conn=getSyncDBPool()
 
 describe('/inventory API', () => {
     it('gets products(25max)', (done) => {
@@ -36,7 +36,7 @@ describe('/inventory API', () => {
             })
     })
     it('verfies just added produect', async () => {
-        var model = new InventoryModel(DBconnection)
+        var model = new InventoryModel(DBPool)
         let res = await model.getProduct(id)
         expect(res).to.not.be.null
         expect(res).have.property('id', id)

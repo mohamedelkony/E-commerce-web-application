@@ -2,15 +2,13 @@ process.env.NODE_ENV = 'test'
 
 import chaiHttp from 'chai-http'
 import chai from 'chai'
-import { DBconnection } from '../src/app'
-import UsersModel from '../src/models/users'
-import { getDBconnection_sync } from '../src/util/getDBconnection'
+import { getSyncDBPool } from '../src/util/DBconnetor'
 
 let expect = chai.expect
 chai.use(chaiHttp)
 
 let url = 'http://127.0.0.1:3000'
-let test_conn = getDBconnection_sync()
+let test_conn = getSyncDBPool()
 
 let user_id = -1
 let epoc = () => Math.ceil(new Date().getTime() / 1000)

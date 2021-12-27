@@ -1,6 +1,5 @@
 
 import { unlink } from 'fs/promises';
-import { json } from 'stream/consumers';
 export default class InventoryModel {
     private conn
     constructor(connection) {

@@ -2,26 +2,14 @@ import express from "express";
 import Joi from 'joi';
 import asyncHandler from "../util/asyncHandler";
 import UsersModel from '../models/users';
-export default class UsersRouter {
+
+export default class UsersController {
     model: UsersModel;
     router: any;
-    constructor(usersmodel: UsersModel) {
-        this.model = usersmodel;
+    constructor(DBconnection) {
+        this.model = new UsersModel(DBconnection);
         this.router = express.Router();
-        this.setupRouter();
-    }
-    private async valdiateSignUP(data) {
-        const schema = Joi.object({
-            username: Joi.string().token().max(25).required(),
-            password: Joi.string().min(3).max(300).required(),
-            gender: Joi.string().valid('male', 'female').required(),
-            email: Joi.string().email().required(),
-            birth: Joi.date().required(),
-            repassword: Joi.ref('password')
-        });
-        return schema.validateAsync(data);
-    }
-    private setupRouter() {
+
         //POST /user
         this.router.post('/', asyncHandler(async (req, res) => {
             try {
@@ -58,5 +46,16 @@ export default class UsersRouter {
             else
                 res.send(user)
         }))
+    }
+    private async valdiateSignUP(data) {
+        const schema = Joi.object({
+            username: Joi.string().token().max(25).required(),
+            password: Joi.string().min(3).max(300).required(),
+            gender: Joi.string().valid('male', 'female').required(),
+            email: Joi.string().email().required(),
+            birth: Joi.date().required(),
+            repassword: Joi.ref('password')
+        });
+        return schema.validateAsync(data);
     }
 }
