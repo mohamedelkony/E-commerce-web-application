@@ -10,7 +10,7 @@ export default class LoginRouter {
         this.model = new UsersModel(DBconnection)
         this.router = express.Router()
         // login user  
-        this.router.post('/', asyncHandler(async (req, res, next) => {
+        this.router.post('/', asyncHandler(async (req, res) => {
             const user = await this.model.getPassword(req.body.email);
             if (user.password && await bcrypt.compare(req.body.password, user.password)) {
                 req.session.user_id = user.id

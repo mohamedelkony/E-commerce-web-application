@@ -1,4 +1,3 @@
-
 export default class CartModel {
     private conn
     constructor(connection) {

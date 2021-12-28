@@ -3,6 +3,7 @@ import path from 'path'
 import LoginContoller from './controllers/login'
 import UsersController from './controllers/users'
 import InventoryController from './controllers/invenotry'
+import SearchController from './controllers/search'
 import getDBPool, { getSyncDBPool } from './util/DBconnetor'
 import CartController from './controllers/cart'
 import morgan from 'morgan'
@@ -11,12 +12,7 @@ let app = express()
 let session = require('express-session');
 let MySQLStore = require('express-mysql-session')(session);
 
-export let DBPool= getDBPool()
-
-let usersController = new UsersController(DBPool)
-let loginController = new LoginContoller(DBPool)
-let inventoryController = new InventoryController(DBPool)
-let cartController = new CartController(DBPool);
+export let DBPool = getDBPool()
 
 let sessionStore = new MySQLStore({}, DBPool)
 
@@ -54,10 +50,17 @@ let log_middleware = morgan(function (tokens, req, res) {
 if (process.env.NODE_ENV !== 'test')
     app.use(log_middleware)
 
+let usersController = new UsersController(DBPool)
+let loginController = new LoginContoller(DBPool)
+let inventoryController = new InventoryController(DBPool)
+let cartController = new CartController(DBPool)
+let searchController = new SearchController(DBPool)
+
 app.use('/users', usersController.router)
 app.use('/login', loginController.router)
 app.use('/inventory', inventoryController.router)
 app.use('/cart', cartController.router)
+app.use('/search', searchController.router)
 
 app.get('/', (req, res) => {
     res.render('home.ejs', { user_id: req.session.user_id });

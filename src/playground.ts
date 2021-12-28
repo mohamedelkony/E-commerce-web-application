@@ -36,3 +36,4 @@ function start_promise() {
         }
     }
     test1()
+    
