@@ -27,24 +27,24 @@ export default class InventoryModel {
         let sql = `update inventory set product_name=? where id=?;`
         await this.conn.execute(sql, [product_name, product_id])
     }
-    
+
     async getProduct(product_id: number) {
         let sql = `select * from inventory where id=?;`
         let [res] = await this.conn.execute(sql, [product_id.toString()])
-        if(res.length > 0)
-            return  res[0]
+        if (res.length > 0)
+            return res[0]
         return null
-     }
+    }
     async edit_product_price(product_id: number, price: number) {
         let sql = `update inventory set price=? where id=?;`
         await this.conn.execute(sql, [price, product_id])
     }
     async delete_product(product_id: number) {
-    
+
         let image_uri_sql = `select url from products_images where its_product_id=?;`
         try {
             let [res] = await this.conn.execute(image_uri_sql, [product_id])
-            let image_uri:string = res[0].url
+            let image_uri: string = res[0].url
             /* erase appended forward slash from uri
                 because it is save as "/public/dynamic/image_name.jpg"
             */
@@ -55,7 +55,10 @@ export default class InventoryModel {
         }
         let sql = `delete from inventory  where id=?;`
         await this.conn.execute(sql, [product_id])
-
     }
-
+    //for testsing
+    async get_random_product_id() {
+        let [res]=await this.conn.execute('select id from inventory where quantity >1 limit 1;')
+        return res[0].id
+    }
 }

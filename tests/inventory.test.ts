@@ -30,6 +30,7 @@ describe('/inventory API', () => {
             .field('product_desc', 'a7aaaaaaaaaaaaaaaaaaaaaa5')
             .attach('image', './public/er.jpeg')
             .end((err, res) => {
+                if(err)done(err)
                 expect(res).have.status(200)
                 id = res.body.product_id
                 done()

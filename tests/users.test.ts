@@ -20,7 +20,6 @@ let testing_user = {
     'password': '123',
     'repassword': '123'
 }
-console.log(testing_user)
 let testing_user_invalid_password = {
     'username': 'test' + epoc(),
     'email': `test${epoc()}@gmail.com`,

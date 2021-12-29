@@ -9,17 +9,21 @@ export default class CartController {
     constructor(connection) {
         this.model = new CartModel(connection)
         this.router = express.Router()
-
         // add cart item
         this.router.post("/", asyncHandler(async (req, res) => {
             if (req.session.user_id === undefined) {
                 res.status(403).send();
                 return
             }
-            await this.model.addToCart(req.body.product_id, req.session.user_id)
-            res.status(201).send()
+            let product_id = req.body.product_id, user_id = req.session.user_id
+            let exists = await this.model.item_already_in_cart(product_id, user_id)
+            if (exists) {
+                res.status(400).send()
+                return
+            }
+            await this.model.addToCart(product_id, user_id)
+            res.status(201).send({ 'product_id': product_id, 'user_id': user_id })
         }))
-
         // get cart item
         this.router.get("/", asyncHandler(async (req, res) => {
             if (req.session.user_id == undefined) {
@@ -29,7 +33,30 @@ export default class CartController {
             let data = await this.model.getCart(req.session.user_id)
             res.send(data)
         }))
+        //update cart item quantity
+        this.router.put('/', asyncHandler(async (req, res) => {
+            if (req.session.user_id == undefined) {
+                res.status(403).send('user not authenticated');
+                return;
+            }
+           
+            if (req.body.quantity === 'up')
+                await this.model.increase_cart_item_qunatity(req.body.product_id, req.session.user_id)
+            else
+                await this.model.decrease_cart_item_qunatity(req.body.product_id, req.session.user_id)
 
+            res.status(200).send()
+        }))
+
+        //clear cart 
+        this.router.delete('/all', asyncHandler(async (req, res, next) => {
+            if (!req.session.user_id) {
+                res.status(403).send('user not authenticated')
+                return
+            }
+            await this.model.clearCart(req.session.user_id)
+            res.status(200).send({ 'user_id': req.session.user_id })
+        }))
         //delete cart item
         this.router.delete('/', asyncHandler(async (req, res, next) => {
             if (!req.session.user_id) {
@@ -37,7 +64,8 @@ export default class CartController {
                 return
             }
             await this.model.removeFromCart(req.body.product_id, req.session.user_id)
-            res.status(200).send()
+            res.status(200).send({ 'product_id': req.body.product_id, 'user_id': req.session.user_id })
         }))
+
     }
 }

@@ -13,17 +13,20 @@ on update set null
 );
 
 insert into products_images(url,its_product_id,image_name) values("dynamic\\4.jpg",4,"casio watch");
-insert into inventory(product_name,price,product_desc,quantity) values("watch","599","class high copy",3);
+insert into inventory(product_name,price,product_desc) values("w1","599","class high copy");
 
 select * from inventory;
 select * from products_images;
 select * from sessions;
 select * from cart_item;
+select * from users;
+select * from inventory where quantity >1 limit 1;
+select id from inventory where id=4;
 
-delete from cart_item where product_id =12 and session_id='124';
-delete from cart_item where id>0;
-
-select a.id,a.product_name,a.price,a.product_desc,a.quantity,b.url,b.image_name from inventory as a left join products_images as b on a.id=b.its_product_id;
+select a.id,a.product_name,a.price,a.product_desc,a.quantity,b.url,b.image_name 
+from inventory as a 
+left join products_images as b
+ on a.id=b.its_product_id;
 
 select product_id,product_name,price,url,product_desc,image_name,quantity from cart_item as a
 left join inventory as b 
@@ -37,17 +40,22 @@ left join products_images as b
 on a.id=b.its_product_id
 where a.id in (select product_id from cart_item) ;
 
-describe inventory;
+select id as user_id,username,email,gender,birthdate as birth from users where id=15;
+select * from inventory where price between 25 and 500 order by product_name limit 25;
+select * from inventory where  price <=50 and  price >= 10  order by product_name limit 25;
+select * from inventory where  product_name like '%a%'    order by product_name limit 25;
 
-delete from products_images where id=2;
+update products_images set url="\\dynamic\\4.jpg" where id=5;
+update inventory set quantity =if(id%2=0,3,5) where id>0;
+
+delete from cart_item where product_id =12 and session_id='124';
+delete from cart_item where id>0;
+delete from inventory where id>8;
 delete from sessions where session_id="PlhuULp3-Qi8EUmhPPjzUrON-dIMQErN";
 delete  from cart_item where id>0;
 
-update products_images set url="\\dynamic\\4.jpg" where id=5;
-update inventory set product_name="Fossil" where id=4;
-
-alter table inventory
-drop product_image_id;
+alter table cart_item
+add unique (product_id,user_id);
 
 alter table inventory
 drop constraint inventory_ibfk_1;
@@ -58,6 +66,10 @@ change  product_name product_name varchar(265);
 alter table inventory
 add foreign key(product_image_id) references products_images(id)
 on delete set null on update cascade;
+
+
+alter table inventory
+alter quantity Set default 1;
 
 alter table cart_item 
 drop session_id;
@@ -73,3 +85,7 @@ add foreign key (user_id) references users(id) on delete cascade on update casca
 
 alter table cart_item
 add user_id int;
+
+describe inventory;
+
+truncate cart_item;

@@ -40,6 +40,7 @@
     "tests": "mocha -r ts-node/register './tests/**/*.ts' --timeout 5000",
     "test:users":"mocha -r ts-node/register './tests/users.test.ts' --timeout 5000",
     "test:search":"mocha -r ts-node/register './tests/search.test.ts' --timeout 5000",
+    "test:cart":"mocha -r ts-node/register './tests/cart.test.ts' --timeout 5000",
     
     "debug": "???"
   },

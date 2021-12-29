@@ -14,7 +14,8 @@ export default class LoginRouter {
             const user = await this.model.getPassword(req.body.email);
             if (user.password && await bcrypt.compare(req.body.password, user.password)) {
                 req.session.user_id = user.id
-                res.redirect(`/profile/me`);
+               // res.redirect(`/profile/me`) 
+               res.send({'user_id':user.id})
             } else
                 res.send('wrong email or password');
         }))
