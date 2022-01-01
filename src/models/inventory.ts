@@ -56,9 +56,6 @@ export default class InventoryModel {
         let sql = `delete from inventory  where id=?;`
         await this.conn.execute(sql, [product_id])
     }
-    //for testsing
-    async get_random_product_id() {
-        let [res]=await this.conn.execute('select id from inventory where quantity >1 limit 1;')
-        return res[0].id
-    }
+
+
 }

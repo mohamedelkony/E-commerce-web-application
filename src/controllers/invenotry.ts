@@ -35,12 +35,18 @@ export default class InventoryController {
             }
         }).single('image')
 
-        //get inventory products
+        //get products
         this.router.get("/", asyncHandler(async (req, res) => {
             let limit = 25;
             if (req.body.limit)
                 limit = req.body.limit
             let data = await this.model.get_products(limit)
+            res.send(data)
+        }))
+
+        //get product
+        this.router.get("/:product_id", asyncHandler(async (req, res) => {
+            let data = await this.model.getProduct(req.params.product_id)
             res.send(data)
         }))
 

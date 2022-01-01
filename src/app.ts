@@ -1,5 +1,6 @@
 import express from "express"
 import path from 'path'
+import OrdersController from './controllers/orders'
 import LoginContoller from './controllers/login'
 import UsersController from './controllers/users'
 import InventoryController from './controllers/invenotry'
@@ -55,12 +56,16 @@ let loginController = new LoginContoller(DBPool)
 let inventoryController = new InventoryController(DBPool)
 let cartController = new CartController(DBPool)
 let searchController = new SearchController(DBPool)
+let ordersController = new OrdersController(DBPool)
+
 
 app.use('/users', usersController.router)
 app.use('/login', loginController.router)
 app.use('/inventory', inventoryController.router)
 app.use('/cart', cartController.router)
 app.use('/search', searchController.router)
+app.use('/orders', ordersController.router)
+
 
 app.get('/', (req, res) => {
     res.render('home.ejs', { user_id: req.session.user_id });

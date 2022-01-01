@@ -18,7 +18,7 @@ export default class CartController {
             let product_id = req.body.product_id, user_id = req.session.user_id
             let exists = await this.model.item_already_in_cart(product_id, user_id)
             if (exists) {
-                res.status(400).send()
+                res.status(400).send({'product_id':product_id,'msg':'item already added'})
                 return
             }
             await this.model.addToCart(product_id, user_id)

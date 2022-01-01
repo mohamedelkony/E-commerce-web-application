@@ -44,12 +44,24 @@ select id as user_id,username,email,gender,birthdate as birth from users where i
 select * from inventory where price between 25 and 500 order by product_name limit 25;
 select * from inventory where  price <=50 and  price >= 10  order by product_name limit 25;
 select * from inventory where  product_name like '%a%'    order by product_name limit 25;
+select * from orders where user_id=64;
+select * from orders_items;
 
+select quantity from inventory where id in
+        (
+        select product_id  
+        from orders_items as a
+        inner join orders as b 
+        on  b.id=a.order_id
+        where order_id=1
+	);
+    
 update products_images set url="\\dynamic\\4.jpg" where id=5;
 update inventory set quantity =if(id%2=0,3,5) where id>0;
 
-delete from cart_item where product_id =12 and session_id='124';
-delete from cart_item where id>0;
+
+delete from carts_items where product_id =12 and session_id='124';
+delete from carts_items where id>0;
 delete from inventory where id>8;
 delete from sessions where session_id="PlhuULp3-Qi8EUmhPPjzUrON-dIMQErN";
 delete  from cart_item where id>0;
@@ -67,12 +79,11 @@ alter table inventory
 add foreign key(product_image_id) references products_images(id)
 on delete set null on update cascade;
 
-
 alter table inventory
 alter quantity Set default 1;
 
-alter table cart_item 
-drop session_id;
+alter table orders 
+drop total;
 
 alter table cart_item
 drop constraint cart_item_ibfk_1;
@@ -83,8 +94,11 @@ add foreign key (product_id) references inventory(id) on delete cascade on updat
 alter table cart_item 
 add foreign key (user_id) references users(id) on delete cascade on update cascade;
 
-alter table cart_item
-add user_id int;
+alter table orders
+rename column order_status to status;
+
+alter table orders
+add total_priec decimal(10,2);
 
 describe inventory;
 
