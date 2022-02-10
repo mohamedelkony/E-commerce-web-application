@@ -4,6 +4,8 @@
 <meta http-equiv="X-UA-Compatible content=IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="stylesheet" href="/styles/mainStyle.css">
+<link rel='stylesheet' href='/styles/adminPanel.css'>
+<script src='/public/scripts/adminPanel.js'></script>
 <title>ConvFourier</title>
 <div style="text-align: center;">
     <h2>ConvFourier</h2>
@@ -12,33 +14,21 @@
 </head>
 
 <body>
-    <div class='cDiv iborder'>
-        <form method="POST" action="/inventory" enctype="multipart/form-data" id='add_form'>
+    <h3 class='cetnered_header'>Add new product</h3>
+    <div>
+        <form class='add_div' method="POST" action="/inventory" enctype="multipart/form-data" id='add_form'>
             <label for="product_name">product name </label>
-            <input type="text" name="product_name" id="product_name" required><br>
+            <input type="text" name="product_name" id="product_name" required>
             <label for="price">price </label>
-            <input type="number" id="price" name="price" required><br>
+            <input type="number" id="price" name="price" required>
             <label for="product_desc">product description </label>
-            <input type='text' id="product_desc" name="product_desc"><br>
+            <input type='text' id="product_desc" name="product_desc">
             <label for="image">image</label>
-            <input type="file" name="image" id='image'><br>
-            <input type="button" onclick="postData()" value="Add">
+            <input type="file" name="image" id='image'>
+            <input class ='add_btn' type="button" onclick="postData()" value="Add new product">
         </form>
     </div>
-    <script>
-        async function postData() {
-            let myForm = document.getElementById('add_form')
-            let formData = new FormData(myForm)
-            const res = await fetch('/inventory', {
-                method: 'POST',
-                body: formData
-            })
-            if (res.ok) {
-                let body=await res.json()
-                alert(`product added (id:${body.product_id})`)
-            }
-            else
-                alert('Error ' + await res.text())
-        }
-    </script>
+    <h3 class='cetnered_header'>Edit inventory details</h3>
+    <div id='tablediv'>
+    </div>
 </body>

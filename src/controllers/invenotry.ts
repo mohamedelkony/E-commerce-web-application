@@ -70,6 +70,11 @@ export default class InventoryController {
 
         //edit product name
         this.router.put('/name', asyncHandler(async (req, res) => {
+           if(!req.body.product_id || !req.body.product_name)
+           {
+               res.status(400).send('Error invalid req body')
+               return
+           }
             await this.model.edit_product_name(req.body.product_id, req.body.product_name)
             res.send({
                 'product_id': req.body.product_id,
@@ -79,6 +84,12 @@ export default class InventoryController {
 
         //edit product price
         this.router.put('/price', asyncHandler(async (req, res) => {
+            if(!req.body.product_id || !req.body.price)
+            {
+                res.status(400).send('Error invalid req body')
+                return
+            }
+            
             await this.model.edit_product_price(req.body.product_id, req.body.price)
             res.send({
                 'product_id': req.body.product_id,
@@ -86,8 +97,40 @@ export default class InventoryController {
             })
         }))
 
+       //edit product description
+       this.router.put('/description', asyncHandler(async (req, res) => {
+        if(!req.body.product_id || !req.body.product_desc)
+        {
+            res.status(400).send('Error invalid req body')
+            return
+        }
+        await this.model.edit_product_description(req.body.product_id, req.body.product_desc)
+        res.send({
+            'product_id': req.body.product_id,
+            'product_desc': req.body.product_desc
+        })
+    }))
+
+    //edit product quantity
+    this.router.put('/quantity', asyncHandler(async (req, res) => {
+        if(!req.body.product_id || !req.body.quantity||req.body.quantity<0)
+        {
+            res.status(400).send('Error invalid req body')
+            return
+        }
+        
+        await this.model.edit_product_quantity(req.body.product_id, req.body.quantity)
+        res.send({
+            'product_id': req.body.product_id,
+            'quantity': req.body.quantity
+        })
+    }))
         //delete product
         this.router.delete('/', asyncHandler(async (req, res) => {
+            if (!req.body.product_id) {
+                res.status(400).send('bad request undefiend porduct_id')
+                return
+            }
             await this.model.delete_product(req.body.product_id)
             res.send({
                 'product_id': req.body.product_id

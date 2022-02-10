@@ -1,0 +1,62 @@
+.wrapper{
+  display: grid;
+  grid-template-columns: 100px;
+}
+.label{
+  display:block
+}
+.textbox{
+  display:none;
+}
+.wrapper:hover .textbox{
+  display:block; 
+}
+.wrapper:hover .label{
+  display:none
+}
+#inventoryTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#inventoryTable td, #inventoryTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#inventoryTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#inventoryTable tr:hover {
+  
+  background-color: #ddd;
+  }
+
+#inventoryTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #2d3432;
+  color: white;
+}
+
+.add_div {
+  border:1px solid #cbcbcb;
+  display: grid;
+  grid-template-columns: 35% 65%;
+  width: 50%;
+  min-width:  350px;
+  max-width: 500px;
+  padding :5px;
+  margin: auto;
+}
+.add_div input,label{
+  padding:5px;
+}
+
+.add_btn{
+  grid-column:1/span 2 ;
+}
+.cetnered_header{
+  text-align: center;
+}

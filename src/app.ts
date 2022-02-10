@@ -8,7 +8,7 @@ import SearchController from './controllers/search'
 import getDBPool, { getSyncDBPool } from './util/DBconnetor'
 import CartController from './controllers/cart'
 import morgan from 'morgan'
-
+import mysql = require('mysql2')
 let app = express()
 let session = require('express-session');
 let MySQLStore = require('express-mysql-session')(session);
@@ -100,10 +100,13 @@ app.use(function (err, req, res, next) {
     if (process.env.NODE_ENV === 'production') {
         console.error(err.stack)
         console.log(err)
-        res.status(500).send('Something broke!')
     }
-    else
-        throw err
+    else {
+        console.log(err)
+        
+        // throw err
+    }
+    res.status(500).send('Something broke!')
 })
 if (!module.parent) {
     app.listen(3000, async function () {
