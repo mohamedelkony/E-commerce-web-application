@@ -1,0 +1,6 @@
+#store {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap:0px;
+    margin:1px;
+}

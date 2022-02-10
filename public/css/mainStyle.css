@@ -35,16 +35,19 @@ body {
     padding: 8px;
     margin: auto;
 }
-
 .menu {
     text-align: center;
+    display:grid;
+    grid-template-columns:auto 1fr auto auto auto;
+    background-color: rgb(49, 49, 49); 
+    margin:0px;
+    width:100%;
 }
 
 .menu a:link,
 a:visited {
-    display: inline-block;
     background-color: rgb(49, 49, 49);
-    padding: 8px 10px;
+    padding: 0px 10px;
     text-decoration: none;
     text-align: center;
     color: white;
@@ -53,7 +56,6 @@ a:visited {
 
 .menu a:hover,
 a:active {
-    display: inline-block;
     background-color: rgb(104, 104, 104);
     padding: 8px 10px;
     text-decoration: none;

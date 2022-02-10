@@ -1,11 +1,20 @@
 <div class="menu">
     <a href='/'>home</a>
+    <input type="text" id="search" onkeypress="search_onkeypress(event)" placeholder="Search">
     <% if(typeof user_id !='undefined'){%>
-        <a href='/profile/me'>Profile@<%=user_id%></a>
-        <a href='/logout'>Logout</a>
-        <%}else{%>
-            <a href='/login'>Log in</a>
-            <a href='/signup'>Sign up</a>
-            <%}%>
-                <a href='/users'>Our users</a>
+        <a href='/profile/me'>my profile@<%=user_id%></a>
+        <a href='/logout'>logout</a>
+    <%}else{%>
+        <a href='/login'>log in</a>
+        <a href='/signup'>sign up</a>
+    <%}%>
+    <a href='/users'>Our users</a>
 </div>
+<script>
+    async function search_onkeypress(e, id) {
+    if (e.keyCode === 13) {
+      e.preventDefault(); 
+      window.location.href = '/s/'+document.getElementById('search').value
+    }
+    }
+</script>

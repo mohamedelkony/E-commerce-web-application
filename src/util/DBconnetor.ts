@@ -13,7 +13,7 @@ export function getSyncDBPool(): mysql.Pool {
 export default function getDBPool() {
     let pool = (mysql.createPool({
         host: 'localhost', user: 'nodejs',
-        password: 'nodejs', database: 'convfourierDB', port: 3306,
+        password: 'nodejs',database: 'convfourierDB', port: 3306,
         debug: false
     }))
     if (process.env.NODE_ENV !== 'test')

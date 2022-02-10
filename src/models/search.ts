@@ -24,7 +24,7 @@ export default class SearchModel {
             args.push(product_desc.toLowerCase())
             sql_desc = ` product_desc like CONCAT('%', ?,  '%') `
         }
-        let sql = 'select * from inventory where '
+        let sql = 'select a.id as product_id,a.product_name,a.price,a.product_desc,b.url as image_url,b.image_name, a.quantity as quantity from inventory as a left join products_images as b on a.id=b.its_product_id  where '
         sql += [sql_name, sql_from_price, sql_to_price, sql_desc].filter(x => x).join(' and ')
         sql = sql + ' order by product_name limit 25;'
 

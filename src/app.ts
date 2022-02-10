@@ -9,10 +9,20 @@ import getDBPool, { getSyncDBPool } from './util/DBconnetor'
 import CartController from './controllers/cart'
 import morgan from 'morgan'
 import mysql = require('mysql2')
-let app = express()
-let session = require('express-session');
-let MySQLStore = require('express-mysql-session')(session);
+import helmet from 'helmet'
+const app = express()
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const dotenv = require('dotenv');
+const compression = require('compression')
 
+//app.use(helmet())
+// compress all responses
+app.use(compression())
+//load environment variables
+dotenv.config();
+
+console.log('server is booting ...')
 export let DBPool = getDBPool()
 
 let sessionStore = new MySQLStore({}, DBPool)
@@ -70,6 +80,11 @@ app.use('/orders', ordersController.router)
 app.get('/', (req, res) => {
     res.render('home.ejs', { user_id: req.session.user_id });
 })
+
+app.get('/s/:name',(req,res)=>{
+    res.render('search.ejs', { search_query: req.params.name });
+})
+
 app.get('/logout', (req, res) => {
     if (req.session.user_id)
         req.session.destroy((err) => {
@@ -103,15 +118,15 @@ app.use(function (err, req, res, next) {
     }
     else {
         console.log(err)
-        
         // throw err
     }
     res.status(500).send('Something broke!')
 })
+
+let port=process.env.PORT||2401
 if (!module.parent) {
-    app.listen(3000, async function () {
-        console.log(`Web server started@localhost:3000`);
+    app.listen(port, async function () {
+        console.log(`Web server started@localhost:${port}`);
     })
 }
-
 export default app

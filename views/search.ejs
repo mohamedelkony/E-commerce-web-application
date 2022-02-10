@@ -17,8 +17,8 @@
 </html>
 <script type='module'>
     import {createCardHTML} from '/scripts/componentGenerator.js';
-    async function getInventoryData() {
-        const res = await fetch(`/inventory`, {
+    async function getSearchData() {
+        const res = await fetch(`/search/`+`<%=search_query%>`, {
             method: 'GET',
         });
         if (res.ok)
@@ -28,8 +28,8 @@
             return null
         }
     }
-    async function displayInventoryData() {
-        let data = await getInventoryData();
+    async function displaySearchData() {
+        let data = await getSearchData();
         if (data == null) {
             alert("can't get data");
             return;
@@ -39,6 +39,6 @@
              innerHTML  += createCardHTML(product, "add to cart",'card_onclick')    
         document.getElementById("store").innerHTML = innerHTML
     }
-    displayInventoryData()
+    displaySearchData()
 </script>
 <script src="/public/scripts/card_onclick.js"></script>
