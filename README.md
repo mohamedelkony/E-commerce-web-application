@@ -16,5 +16,5 @@ includes
 
 # server logs
 ![logs](https://github.com/mohamedelkony/convFourier/blob/master/readme_photos/server_logs.png?raw=true)
-# server seige under 30 concurrent users
-![seige](https://github.com/mohamedelkony/convFourier/blob/master/readme_photos/seige.png?raw=true)
+# server siege under 30 concurrent users
+![siege](https://github.com/mohamedelkony/convFourier/blob/master/readme_photos/siege.png?raw=true)
