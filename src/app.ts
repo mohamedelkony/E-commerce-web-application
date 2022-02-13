@@ -78,7 +78,11 @@ app.use('/orders', ordersController.router)
 
 
 app.get('/', (req, res) => {
-    res.render('home.ejs', { user_id: req.session.user_id });
+    res.render('home.ejs', { user_id: req.session.user_id,pageNumber:1});
+})
+
+app.get('/page', (req, res) => {
+    res.render('home.ejs', { user_id: req.session.user_id,pageNumber:req.query.pageNumber});
 })
 
 app.get('/s/:name',(req,res)=>{

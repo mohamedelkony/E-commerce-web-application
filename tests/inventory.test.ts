@@ -15,7 +15,7 @@ let test_conn = getSyncDBPool()
 describe('/inventory API', () => {
     it('gets products in page #1 ', (done) => {
         chai.request(url)
-            .get('/inventory')
+            .get('/inventory?pageSize=5&pageNumber=1')
             .send({
                 'pageNumber': 1,
                 'pageSize': '5'
@@ -32,11 +32,8 @@ describe('/inventory API', () => {
 
     it('gets products in page #2 ', (done) => {
         chai.request(url)
-            .get('/inventory')
-            .send({
-                'pageNumber': 2,
-                'pageSize': '3'
-            }).then((res) => {
+            .get('/inventory?pageNumber=2&pageSize=3')
+           .then((res) => {
                 expect(res).have.status(200)
                 expect(res.body).to.be.an('array')
                 expect(res.body).have.property('length', 3)

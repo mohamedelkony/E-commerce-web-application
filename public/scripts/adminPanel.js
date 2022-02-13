@@ -15,7 +15,7 @@ async function postData() {
         alert('Error ' + await res.text())
 }
 async function fetchInventory() {
-    const res = await fetch('/inventory', {
+    const res = await fetch('/inventory?pageSize=100', {
         method: 'get'
     })
     if (res.ok) {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel='stylesheet' href='/css/mainStyle.css'>
     <link rel='stylesheet' href='/css/inventory.css'>
@@ -11,14 +12,26 @@
     <title>convFourier</title>
     <%- include('partials/menu.ejs')%>
 </head>
+
 <body>
-<div id="store"></div>
+    <div id="store"></div>
+    <div id='pagination'>
+        <a id='prev'><</a>
+                <a id="p1"></a>
+                <a id="p2"></a>
+                <a id="p3"></a>
+                <a id="p4"></a>
+                <a id="p5"></a>
+                <a id='next'>></a>
+
+    </div>
 </body>
+
 </html>
 <script type='module'>
-    import {createCardHTML} from '/scripts/componentGenerator.js';
+    import { createCardHTML } from '/scripts/componentGenerator.js';
     async function getInventoryData() {
-        const res = await fetch(`/inventory`, {
+        const res = await fetch(`/inventory?pageNumber=<%=pageNumber%>&pageSize=15`, {
             method: 'GET',
         });
         if (res.ok)
@@ -34,11 +47,27 @@
             alert("can't get data");
             return;
         }
-        let innerHTML=""
-        for (let product of data) 
-             innerHTML  += createCardHTML(product, "add to cart",'card_onclick')    
+        let innerHTML = ""
+        for (let product of data)
+            innerHTML += createCardHTML(product, "add to cart", 'card_onclick')
         document.getElementById("store").innerHTML = innerHTML
     }
     displayInventoryData()
 </script>
 <script src="/public/scripts/card_onclick.js"></script>
+<script>
+    let pageNumber = parseInt('<%=pageNumber%>')
+    for (let i = 1; i <= 5; i++) {
+        let p = i + Math.max(0, pageNumber - 3)
+        document.getElementById(`p${i}`).setAttribute('href', `/page?pageNumber=${p}`)
+        document.getElementById(`p${i}`).innerText = `${p}`
+        if (p == pageNumber)
+            document.getElementById(`p${i}`).style.color = 'black'
+    }
+    if (pageNumber == 1)
+        document.getElementById(`prev`).style.display = 'none';
+
+    document.getElementById(`prev`).setAttribute('href', `/page?pageNumber=${pageNumber - 1}`)
+    document.getElementById(`next`).setAttribute('href', `/page?pageNumber=${pageNumber + 1}`)
+
+</script>

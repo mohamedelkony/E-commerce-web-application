@@ -4,3 +4,25 @@
     grid-gap:0px;
     margin:1px;
 }
+#pagination{
+    padding:2px;
+    display:grid;
+    grid-template-columns:auto auto auto auto auto auto auto;
+    width:100px;
+    background-color:#ffffff;
+    margin:10px 0px;
+}
+#pagination a:link,
+#pagination a:visited{
+    padding: 2px 10px;
+    text-decoration: none;
+    text-align: center;
+    margin: auto;
+}
+#pagination a:hover,
+#pagination a:active{
+    padding: 2px 10px;
+    text-decoration: none;
+    text-align: center;
+    margin: auto;
+}

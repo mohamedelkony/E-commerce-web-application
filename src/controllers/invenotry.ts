@@ -38,17 +38,11 @@ export default class InventoryController {
         /*
         get products
 
-        /inventory/ GET
-        body 
-        {
-            PageNumber:2,
-            pageSize:15
-        }
-        
+        /inventory?pageSize=15&pageNumber=2 GET
         */
         this.router.get("/", asyncHandler(async (req, res) => {
-            let pageSize = req.body.pageSize||25
-            let pageNumber=req.body.startPage||1
+            let pageSize = req.query.pageSize||25
+            let pageNumber=req.query.pageNumber||1
             let data = await this.model.get_products(pageNumber,pageSize)
             res.send(data)
         }))
