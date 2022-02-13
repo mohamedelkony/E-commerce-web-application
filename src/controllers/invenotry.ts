@@ -35,12 +35,21 @@ export default class InventoryController {
             }
         }).single('image')
 
-        //get products
+        /*
+        get products
+
+        /inventory/ GET
+        body 
+        {
+            PageNumber:2,
+            pageSize:15
+        }
+        
+        */
         this.router.get("/", asyncHandler(async (req, res) => {
-            let limit = 25;
-            if (req.body.limit)
-                limit = req.body.limit
-            let data = await this.model.get_products(limit)
+            let pageSize = req.body.pageSize||25
+            let pageNumber=req.body.startPage||1
+            let data = await this.model.get_products(pageNumber,pageSize)
             res.send(data)
         }))
 

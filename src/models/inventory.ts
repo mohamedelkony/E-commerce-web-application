@@ -1,16 +1,21 @@
 
 import { unlink } from 'fs/promises';
+import { start } from 'repl';
 export default class InventoryModel {
     private pool
     constructor(connection) {
         this.pool = connection
     }
-    async get_products(limit) {
-        let thisLimit = limit;
-        if (limit == undefined || limit == null)
-            thisLimit = 10;
+    /*
+    @ param page :page number starting from 1
+    */
+    async get_products(page:number, size:number) {
+        if (!page)
+            page = 1
+        if (!size)
+            size = 20
         const [res] = await this.pool.execute(
-            "select a.id as product_id,a.product_name,a.price,a.product_desc,b.url as image_url,b.image_name, a.quantity as quantity from inventory as a left join products_images as b on a.id=b.its_product_id order by a.price desc limit ?;", [thisLimit.toString()])
+            'select a.id as product_id,a.product_name,a.price,a.product_desc,b.url as image_url,b.image_name, a.quantity as quantity from inventory as a left join products_images as b on a.id=b.its_product_id  order by a.id limit ? offset ?',[size.toString(),((page-1)*size).toString()])
         return res;
     }
 
@@ -27,12 +32,12 @@ export default class InventoryModel {
         let sql = `update inventory set product_name=? where id=?;`
         await this.pool.execute(sql, [product_name, product_id])
     }
-    async  edit_product_description(product_id: number, product_desc: string) {
+    async edit_product_description(product_id: number, product_desc: string) {
         let sql = `update inventory set product_desc=? where id=?;`
         await this.pool.execute(sql, [product_desc, product_id])
     }
 
-    async   edit_product_quantity(product_id: number, quantity: string) {
+    async edit_product_quantity(product_id: number, quantity: string) {
         let sql = `update inventory set quantity=? where id=?;`
         await this.pool.execute(sql, [quantity, product_id])
     }
