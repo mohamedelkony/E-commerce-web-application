@@ -86,7 +86,7 @@ app.get('/page', (req, res) => {
 })
 
 app.get('/s/:name',(req,res)=>{
-    res.render('search.ejs', { search_query: req.params.name });
+    res.render('search.ejs', {user_id: req.session.user_id, search_query: req.params.name });
 })
 
 app.get('/logout', (req, res) => {

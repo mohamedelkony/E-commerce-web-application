@@ -1,9 +1,4 @@
-#store {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    grid-gap:0px;
-    margin:1px;
-}
+
 #pagination{
     padding:2px;
     display:grid;

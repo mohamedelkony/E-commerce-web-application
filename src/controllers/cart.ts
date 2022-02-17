@@ -33,19 +33,28 @@ export default class CartController {
             let data = await this.model.getCart(req.session.user_id)
             res.send(data)
         }))
-        //update cart item quantity
+        /*
+        update cart item quantity
+        
+        /cart/ PUT
+        
+        {
+            product_id:513,
+            quantity:'down'
+        }
+        */
         this.router.put('/', asyncHandler(async (req, res) => {
             if (req.session.user_id == undefined) {
                 res.status(403).send('user not authenticated');
                 return;
             }
-           
+           let newquantity
             if (req.body.quantity === 'up')
-                await this.model.increase_cart_item_qunatity(req.body.product_id, req.session.user_id)
+            newquantity=await this.model.increase_cart_item_qunatity(req.body.product_id, req.session.user_id)
             else
-                await this.model.decrease_cart_item_qunatity(req.body.product_id, req.session.user_id)
+            newquantity= await this.model.decrease_cart_item_qunatity(req.body.product_id, req.session.user_id)
 
-            res.status(200).send()
+            res.status(200).send({'quantity':newquantity})
         }))
 
         //clear cart 

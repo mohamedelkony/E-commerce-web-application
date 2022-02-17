@@ -40,6 +40,10 @@ export default class CartModel {
        where  product_id=? and user_id=?;
        `;
         await this.conn.execute(sql, [product_id, user_id])
+
+        let sql2 = 'select quantity from carts_items where user_id=? and product_id=?;'
+        const [res] = await this.conn.execute(sql2, [user_id, product_id])
+        return res[0].quantity;
     }
     async decrease_cart_item_qunatity(product_id: number, user_id: number) {
         let sql =
@@ -48,5 +52,10 @@ export default class CartModel {
               where  product_id=? and user_id=?;`
     
         await this.conn.execute(sql, [product_id, user_id])
+ 
+        let sql2 = 'select quantity from carts_items where user_id=? and product_id=?;'
+        const [res] = await this.conn.execute(sql2, [user_id, product_id])
+        return res[0].quantity;
+   
     }
 }
