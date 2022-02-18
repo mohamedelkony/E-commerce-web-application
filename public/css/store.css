@@ -1,6 +1,6 @@
 #store {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns:1fr 1fr 1fr 1fr;
     grid-gap: 5px;
     margin: 1px;
 }
@@ -22,24 +22,28 @@
     width: 100%;
 }
 .card {
-    margin: 0px;
     text-align: center;
     font-family: arial;
     border: 1px solid rgb(174 174 174);
     display: grid;
-    grid-template-rows: auto auto auto auto auto auto;
-    place-items: center;
+    grid-template-rows: auto auto auto auto;
+  align-items: center;
+  justify-items: center;
+   grid-gap:0px;
+   padding:0px;
+   margin:0px;
 }
 
 .card >button {
     border: none;
-    padding: 12px;
     color: white;
-    background-color: #000;
+    background-color: #101010;
     text-align: center;
     cursor: pointer;
     font-size: 18px;
     width: 100%;
+    //height:100%;
+    height:40px;
 }
 
 .img_wrapper {
@@ -51,11 +55,12 @@
 }
 
 .card img {
-    width: 190px;
+    max-width: 190px;
+    max-height:300px;
 }
 
 .card h4 {
-    margin: 1px;
+    margin:1px;
 }
 
 .card button:hover {
@@ -65,10 +70,13 @@
 .card_p {
     margin: 1px;
     font-size: 14px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    max-height:70px;
 }
 
 .price {
     color: rgb(32, 32, 32);
-    font-size: 16px;
+    font-size: 20px;
     margin: 1px;
 }
