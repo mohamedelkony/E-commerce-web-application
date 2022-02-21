@@ -16,11 +16,14 @@ const MySQLStore = require('express-mysql-session')(session);
 const dotenv = require('dotenv');
 const compression = require('compression')
 
+
 //app.use(helmet())
 // compress all responses
 app.use(compression())
 //load environment variables
 dotenv.config();
+
+
 
 console.log('server is booting ...')
 export let DBPool = getDBPool()

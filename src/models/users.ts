@@ -1,47 +1,53 @@
 import bcrypt from 'bcrypt';
+import  db from '../util/db';
 
 export default class UsersModel {
-    conn = null
-    constructor(connection) {
-        this.conn = connection
+    //pool = null
+    constructor(pool) {
+      //  this.pool = pool
     }
 
     async isEmailUsed(email: string) {
-        const [res] = await this.conn.execute('select email from users where email=?', [email])
-        if (res.length > 0)
+        const {rows} = await db.query('select email from users where email=$1', [email])
+        if (rows.length > 0)
             return true
         else
             return false
     }
     async getPassword(email: string) {
-        const [res] = await this.conn.query('select id,password,username from users where email=?', [email])
-        if (res.length === 0) return [null, null];
-        return res[0]
+        const {rows} = await db.query('select id,password,username from users where email=$1', [email])
+        if (rows.length === 0) return [null, null];
+        let res:any= rows[0]
+        return res
     }
 
     async getByUsername(username: string) {
-        const [res] = await this.conn.execute('select username,email,gender,id,birthdate from users where username=?', [username])
-        if (res.length === 0) return null
+        const {rows} = await db.query('select username,email,gender,id,birthdate from users where username=$1', [username])
+        if (rows.length === 0) return null
+        let res:any=rows[0]
         let user: any = {}
-        user.username = res[0].username
-        user.birth = res[0].birthdate
-        user.id = res[0].id
-        user.email = res[0].email
-        user.gender = res[0].gender
+        user.username = res.username
+        user.birth = res.birthdate
+        user.id = res.id
+        user.email = res.email
+        user.gender = res.gender
         return user;
     }
 
     async getbyID(user_id: number) {
-        const [res] = await this.conn.execute('select id as user_id,username,email,gender,birthdate as birth from users where id=?', [user_id])
-        if (res.length === 0) return null
-        return res[0];
+        const {rows} = await db.query('select id as user_id,username,email,gender,birthdate as birth from users where id=$1', [user_id])
+        if (rows.length === 0) return null
+        let res:any=rows[0]
+        return res;
     }
     async addUser(userData) {
         userData.password = await bcrypt.hash(userData.password, 10)
-        const [res] = await this.conn.execute(`insert into users(username,birthdate,email,password,gender) values(?,?,?,?,?)`, [userData.username, userData.birth, userData.email, userData.password, userData.gender])
+         await db.query(`insert into users(username,birthdate,email,password,gender) values($1,$2,$3,$4,$5)`, [userData.username, userData.birth, userData.email, userData.password, userData.gender])
     }
     async getID(email) {
-        const [res] = await this.conn.execute("select id from users where email=?", [email]);
-        return res[0].id;
+        const {rows} = await db.query("select id from users where email=$1", [email]);
+        let x:any=rows[0]
+        let y=rows[0]
+        return x.id;
     }
 }
