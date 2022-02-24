@@ -9,8 +9,8 @@ export default class InventoryController {
     router: Router
     private model: InventoryModel
     private upload: any
-    constructor(connection) {
-        this.model = new InventoryModel(connection)
+    constructor() {
+        this.model = new InventoryModel()
         this.router = express.Router()
         //setup multer image storage
         const image_storage = multer.diskStorage({

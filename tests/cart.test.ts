@@ -1,17 +1,18 @@
 process.env.NODE_ENV = 'test'
+process.env.PGHOST='localhost'
+process.env.PGUSER='postgres'
+process.env.PGDATABASE='convFourier'
+process.env.PGPASSWORD='nodejs'
+process.env.PGPORT='5432'
 
 import chaiHttp from 'chai-http'
 import chai from 'chai'
-import { DBPool } from '../src/app'
-import InventoryModel from '../src/models/inventory'
-import CartModel from '../src/models/cart'
 import TestModel from '../src/models/test'
-
+import CartModel from '../src/models/cart'
 let expect = chai.expect
 chai.use(chaiHttp)
-let inventoryModel = new InventoryModel(DBPool)
-let cartModel = new CartModel(DBPool)
-let testModel = new TestModel(DBPool)
+let testModel = new TestModel()
+let cartModel=new CartModel()
 
 let url = 'http://127.0.0.1:3000'
 
@@ -61,8 +62,8 @@ describe('/Cart', () => {
     let rand_product_id = -1
     it('add random product to fake user\'s cart', (done) => {
         let p = testModel.get_random_product_id()
-        p.then((res) => {
-            rand_product_id = res
+        p.then((id) => {
+            rand_product_id = id
             chai.request(url)
                 .post('/cart')
                 .set('cookie', login_cookie)

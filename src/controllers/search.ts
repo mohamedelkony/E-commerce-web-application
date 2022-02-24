@@ -6,8 +6,8 @@ import SearchModel from "../models/search"
 export default class CartController {
     router: Router
     private model: SearchModel
-    constructor(connection) {
-        this.model = new SearchModel(connection)
+    constructor() {
+        this.model = new SearchModel()
         this.router = express.Router()
 
         // get search result

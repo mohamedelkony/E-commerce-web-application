@@ -5,16 +5,16 @@ import LoginContoller from './controllers/login'
 import UsersController from './controllers/users'
 import InventoryController from './controllers/invenotry'
 import SearchController from './controllers/search'
-import getDBPool, { getSyncDBPool } from './util/DBconnetor'
+import getDBPool from './util/DBconnetor'
 import CartController from './controllers/cart'
 import morgan from 'morgan'
-import mysql = require('mysql2')
 import helmet from 'helmet'
 const app = express()
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
 const dotenv = require('dotenv');
 const compression = require('compression')
+const pgSession = require('connect-pg-simple')(session);
+import db from './util/db'
 
 
 //app.use(helmet())
@@ -28,8 +28,6 @@ dotenv.config();
 console.log('server is booting ...')
 export let DBPool = getDBPool()
 
-let sessionStore = new MySQLStore({}, DBPool)
-
 app.set('views', path.join(__dirname, '..', 'views'))
 app.set('view engine', 'ejs')
 app.use('/', express.static(path.join(__dirname, '..', 'public')))
@@ -37,8 +35,11 @@ app.use('/public', express.static(path.join(__dirname, '..', 'public')))
 app.use('/', express.json())
 app.use('/', express.urlencoded({ extended: false }))
 
+
 app.use(session({
-    store: sessionStore,
+    store:  new pgSession({
+        pool : db.pool,
+      }),
     secret: '3zq29H165a0sdasx9zabtkhgfbdfs8y7c5',
     resave: false,
     saveUninitialized: false,
@@ -64,12 +65,13 @@ let log_middleware = morgan(function (tokens, req, res) {
 if (process.env.NODE_ENV !== 'test')
     app.use(log_middleware)
 
-let usersController = new UsersController(DBPool)
-let loginController = new LoginContoller(DBPool)
-let inventoryController = new InventoryController(DBPool)
-let cartController = new CartController(DBPool)
-let searchController = new SearchController(DBPool)
+let usersController = new UsersController()
+let loginController = new LoginContoller()
+let inventoryController = new InventoryController()
+let cartController = new CartController()
+let searchController = new SearchController()
 let ordersController = new OrdersController(DBPool)
+
 
 
 app.use('/users', usersController.router)

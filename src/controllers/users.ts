@@ -6,8 +6,8 @@ import UsersModel from '../models/users';
 export default class UsersController {
     model: UsersModel;
     router: any;
-    constructor(DBconnection) {
-        this.model = new UsersModel(DBconnection);
+    constructor() {
+        this.model = new UsersModel();
         this.router = express.Router();
 
         //POST /user

@@ -6,8 +6,8 @@ import CartModel from "../models/cart"
 export default class CartController {
     router: Router
     private model: CartModel
-    constructor(connection) {
-        this.model = new CartModel(connection)
+    constructor() {
+        this.model = new CartModel()
         this.router = express.Router()
         // add cart item
         this.router.post("/", asyncHandler(async (req, res) => {

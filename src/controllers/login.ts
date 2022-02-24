@@ -6,8 +6,8 @@ import asyncHandler from "../util/asyncHandler";
 export default class LoginRouter {
     router: any
     model: UsersModel
-    constructor(DBconnection) {
-        this.model = new UsersModel(DBconnection)
+    constructor() {
+        this.model = new UsersModel()
         this.router = express.Router()
         // login user  
         this.router.post('/', asyncHandler(async (req, res) => {

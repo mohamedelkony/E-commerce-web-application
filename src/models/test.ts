@@ -1,19 +1,15 @@
-export default class InventoryModel {
-    private conn
-    constructor(connection) {
-        this.conn = connection
-    }
-
-    async get_quantity_in_inventory_of_cart_items(user_id) {
+import db from '../util/db';
+export default class TestModel {
+    async get_quantity_in_inventory_of_cart_items(user_id:number) {
         let sql =
             `select a.quantity ,a.id as product_id
         from inventory as a
         inner join carts_items as b 
         on  a.id=b.product_id
-        where user_id=?
+        where user_id=$1
         `
-        let [res] = await this.conn.execute(sql, [user_id])
-        return res;
+        let {rows} = await db.query(sql, [user_id])
+        return <any>rows 
     }
 
     async get_quantity_in_inventory_of_order_items(order_id) {
@@ -24,11 +20,11 @@ export default class InventoryModel {
         from orders_items as a
         inner join orders as b 
         on  b.id=a.order_id
-        where order_id=?
+        where order_id=$1
         )
        `
-        let [res] = await this.conn.execute(sql, [order_id])
-        return res;
+        let {rows} = await db.query(sql, [order_id])
+        return <any>rows
     }
     async calculate_order_total_price(order_id: number): Promise<number> {
         let sql = `
@@ -36,14 +32,15 @@ export default class InventoryModel {
         from orders_items as a 
         inner join inventory as b
          on a.product_id=b.id 
-         where order_id=?
+         where order_id=$1
         `
-        let [res] = await this.conn.execute(sql, [order_id])
-        return res[0].total_price
+        let {rows} = await db.query(sql, [order_id])
+        return rows[0]['total_price']
     }
 
     async get_random_product_id() {
-        let [res] = await this.conn.execute('select id from inventory where quantity >1 limit 1;')
-        return res[0].id
+            let {rows} = await db.query('select id as product_id from inventory  limit 1')
+            let x=rows[0]['product_id']
+            return x     
     }
 }

@@ -2,10 +2,7 @@ import bcrypt from 'bcrypt';
 import  db from '../util/db';
 
 export default class UsersModel {
-    //pool = null
-    constructor(pool) {
-      //  this.pool = pool
-    }
+  
 
     async isEmailUsed(email: string) {
         const {rows} = await db.query('select email from users where email=$1', [email])
@@ -16,15 +13,14 @@ export default class UsersModel {
     }
     async getPassword(email: string) {
         const {rows} = await db.query('select id,password,username from users where email=$1', [email])
-        if (rows.length === 0) return [null, null];
-        let res:any= rows[0]
-        return res
+        if (rows.length === 0) return [null, null];   
+        return rows[0] as any
     }
 
     async getByUsername(username: string) {
         const {rows} = await db.query('select username,email,gender,id,birthdate from users where username=$1', [username])
         if (rows.length === 0) return null
-        let res:any=rows[0]
+        let res=rows[0] as any
         let user: any = {}
         user.username = res.username
         user.birth = res.birthdate
@@ -37,8 +33,7 @@ export default class UsersModel {
     async getbyID(user_id: number) {
         const {rows} = await db.query('select id as user_id,username,email,gender,birthdate as birth from users where id=$1', [user_id])
         if (rows.length === 0) return null
-        let res:any=rows[0]
-        return res;
+        return rows[0] as any;
     }
     async addUser(userData) {
         userData.password = await bcrypt.hash(userData.password, 10)
@@ -46,8 +41,7 @@ export default class UsersModel {
     }
     async getID(email) {
         const {rows} = await db.query("select id from users where email=$1", [email]);
-        let x:any=rows[0]
-        let y=rows[0]
-        return x.id;
+        if(rows.length==0)return null
+        return (<any>rows[0]).id
     }
 }

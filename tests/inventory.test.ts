@@ -4,13 +4,13 @@ import chaiHttp from 'chai-http'
 import chai from 'chai'
 import { DBPool } from '../src/app'
 import InventoryModel from '../src/models/inventory'
-import { getSyncDBPool } from '../src/util/DBconnetor'
+import db from '../src/util/db';
 
 let expect = chai.expect
 chai.use(chaiHttp)
 
 let url = 'http://127.0.0.1:3000'
-let test_conn = getSyncDBPool()
+let test_conn = db
 
 describe('/inventory API', () => {
     it('gets products in page #1 ', (done) => {
@@ -33,7 +33,7 @@ describe('/inventory API', () => {
     it('gets products in page #2 ', (done) => {
         chai.request(url)
             .get('/inventory?pageNumber=2&pageSize=3')
-           .then((res) => {
+            .then((res) => {
                 expect(res).have.status(200)
                 expect(res.body).to.be.an('array')
                 expect(res.body).have.property('length', 3)
@@ -60,7 +60,7 @@ describe('/inventory API', () => {
             })
     })
     it('verfies just added produect', async () => {
-        var model = new InventoryModel(DBPool)
+        var model = new InventoryModel()
         let res = await model.getProduct(id)
         expect(res).to.not.be.null
         expect(res).have.property('id', id)
@@ -99,28 +99,26 @@ describe('/inventory API', () => {
             })
     })
 
-    it('verfies product name changed', (done) => {
-        test_conn.execute('select product_name from inventory where id=?', [id],
-            function (err, res, fields) {
-                if (err) done(err)
-                expect(res).to.not.be.null
-                expect(res).to.have.property('length', 1)
-                expect(res[0]).to.have.property('product_name', 'new name')
-                done()
-            })
+    it('verfies product name changed', async () => {
+       
+        let {rows} = await test_conn.query('select product_name from inventory where id=$1', [id])
+        expect(rows).to.not.be.null
+        expect(rows).to.have.property('length', 1)
+        expect(rows[0]as any).to.have.property('product_name', 'new name')
     })
 
-    it('deletes just added product', (done) => {
-        chai.request(url)
-            .delete('/inventory')
-            .send({ 'product_id': id })
-            .then((res) => {
-                expect(res).have.status(200)
-                done()
-            })
-            .catch((err) => {
-                done(err)
-            })
-    })
+
+it('deletes just added product', (done) => {
+    chai.request(url)
+        .delete('/inventory')
+        .send({ 'product_id': id })
+        .then((res) => {
+            expect(res).have.status(200)
+            done()
+        })
+        .catch((err) => {
+            done(err)
+        })
+})
 
 })
