@@ -5,7 +5,6 @@ import LoginContoller from './controllers/login'
 import UsersController from './controllers/users'
 import InventoryController from './controllers/invenotry'
 import SearchController from './controllers/search'
-import getDBPool from './util/DBconnetor'
 import CartController from './controllers/cart'
 import morgan from 'morgan'
 import helmet from 'helmet'
@@ -26,7 +25,7 @@ dotenv.config();
 
 
 console.log('server is booting ...')
-export let DBPool = getDBPool()
+
 
 app.set('views', path.join(__dirname, '..', 'views'))
 app.set('view engine', 'ejs')
@@ -70,7 +69,7 @@ let loginController = new LoginContoller()
 let inventoryController = new InventoryController()
 let cartController = new CartController()
 let searchController = new SearchController()
-let ordersController = new OrdersController(DBPool)
+let ordersController = new OrdersController()
 
 
 

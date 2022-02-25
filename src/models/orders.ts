@@ -1,91 +1,86 @@
+import db from '../util/db'
 export default class OrdersModel {
-    private pool
-    constructor(connection) {
-        this.pool = connection
-    }
-    async order_cart_items(user_id: number): Promise<boolean> {
+
+    async order_cart_items(user_id: number): Promise<number> {
 
         //start transaction
-        let conn = await this.pool.getConnection()
-        await conn.beginTransaction()
+        let client = await db.pool.connect()
         try {
+            await client.query('BEGIN')
             //insert new empty order and get its id
             let insert_order_sql = `
             insert into orders(user_id,status)
-            values (?,'shipping')`
-            let [res] = await conn.execute(insert_order_sql, [user_id])
-            let order_id = res.insertId
+            values ($1,'shipping') returning id as order_id`
+            let { rows } = await client.query(insert_order_sql, [user_id])
+            let order_id = rows[0]['order_id']
 
             let insert_order_items_sql = `
             insert into orders_items(order_id,quantity,product_id)
-            select ?, quantity ,product_id from carts_items
-            where user_id=?
+            select $1, quantity ,product_id from carts_items
+            where user_id=$2
             `
-            await conn.execute(insert_order_items_sql, [order_id, user_id])
+            await client.query(insert_order_items_sql, [order_id, user_id])
 
             let delete_cart_items_sql = `
             delete from carts_items
-            where user_id=?
+            where user_id=$1
             and exists 
-            (select product_id from orders_items where order_id=?)
+            (select product_id from orders_items where order_id=$2)
             `
-            await conn.execute(delete_cart_items_sql, [user_id, order_id])
+            await client.query(delete_cart_items_sql, [user_id, order_id])
 
             let edit_order_quantiity_sql = `
             update orders_items as a
-            inner join inventory as b on a.product_id=b.id
-            set a.quantity = if(a.quantity>b.quantity,b.quantity,a.quantity)
-            where order_id=?  
+set quantity = case when a.quantity>b.quantity then b.quantity else a.quantity end
+from inventory as b 
+where a.product_id=b.id and order_id=$1 
             `
-            await conn.execute(edit_order_quantiity_sql, [order_id])
+            await client.query(edit_order_quantiity_sql, [order_id])
 
             let deduct_inventory_quantiity_sql = `
             update inventory as a 
-            inner join orders_items as b 
-            on a.id=b.product_id
-            set a.quantity=a.quantity -b.quantity 
-            where order_id=?
+            set quantity=a.quantity -b.quantity 
+            from  orders_items as b 
+            where  a.id=b.product_id
+            and order_id=$1
             `
-            await conn.execute(deduct_inventory_quantiity_sql, [order_id])
+            await client.query(deduct_inventory_quantiity_sql, [order_id])
 
-
-
-            let calculate_order_price_sql = 
-            `update orders set total_price =
+            let calculate_order_price_sql =
+                `update orders set total_price =
             (
-            select ifnull (sum(b.price),0)
+            select case when sum(b.price) is null then 0 else sum(b.price) end
             from orders_items as a 
             inner join inventory as b
              on a.product_id=b.id 
-             where order_id=?
+             where order_id=$1
              )
-             where id=?`
-            await conn.execute(calculate_order_price_sql, [order_id,order_id])
-            
-            await conn.commit()
+             where id=$2`
+            await client.query(calculate_order_price_sql, [order_id, order_id])
+
+            await client.query('commit')
             return order_id
         }
         catch (error) {
-            await conn.rollback()
+            await client.query('rollback')
             throw error
         }
-
     }
 
     async get_all_orders(user_id: number):
         Promise<{ 'items': [], 'total_price': number, 'status': string }[]> {
         let get_orders_ids_sql = `
-            select id,status,total_price from orders where user_id=?`
-        let [orders_metadata] = await this.pool.execute(get_orders_ids_sql, [user_id])
+            select id,status,total_price from orders where user_id=$1`
+        let orders_metadata = await db.query(get_orders_ids_sql, [user_id])
         let orders = []
-        for (let metadata of orders_metadata) {
+        for (let metadata of orders_metadata.rows) {
             let get_order_details_sql = `
-            select product_id,quantity from orders_items where order_id=?`
-            let [order_items] = await this.pool.execute(get_order_details_sql, [metadata.id])
+            select product_id,quantity from orders_items where order_id=$1`
+            let order_items = await db.query(get_order_details_sql, metadata['id'])
             let order: any = {}
-            order.items = order_items
-            order.status = metadata.status
-            order.total_price = metadata.total_price
+            order.items = order_items.rows as any
+            order.status = metadata['status']
+            order.total_price = metadata['total_price']
             orders.push(order)
         }
         return orders
@@ -93,15 +88,15 @@ export default class OrdersModel {
     async get_order(order_id: number):
         Promise<{ 'items': [], 'total_price': number, 'status': string }> {
         let get_order_details_sql = `
-            select product_id,quantity from orders_items where order_id=?`
-        let [order_items] = await this.pool.execute(get_order_details_sql, [order_id])
+            select product_id,quantity from orders_items where order_id=$1`
+        let res1 = await db.query(get_order_details_sql, [order_id])
         let order: any = {}
-        order.items = order_items
+        order.items = (res1.rows) as any
         let get_orders_ids_sql = `
-            select status,total_price from orders where id=?`
-        let [order_metadata] = await this.pool.execute(get_orders_ids_sql, [order_id])
-        order.status = order_metadata[0].status
-        order.total_price = order_metadata[0].total_price
+            select status,total_price from orders where id=$1`
+        let res2 = await db.query(get_orders_ids_sql, [order_id])
+        order.status = res2.rows[0]['status']
+        order.total_price = res2.rows[0]['total_price']
         return order
     }
 

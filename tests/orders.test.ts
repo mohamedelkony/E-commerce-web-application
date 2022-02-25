@@ -1,10 +1,14 @@
 process.env.NODE_ENV = 'test'
+process.env.PGHOST='localhost'
+process.env.PGUSER='postgres'
+process.env.PGDATABASE='convFourier'
+process.env.PGPASSWORD='nodejs'
+process.env.PGPORT='5432'
 
 import chaiHttp from 'chai-http'
 import chai from 'chai'
-import { DBPool } from '../src/app'
 import TestModel from '../src/models/test'
-import { not } from 'joi'
+
 
 let expect = chai.expect
 chai.use(chaiHttp)

@@ -6,8 +6,8 @@ import OrdersModel from "../models/orders"
 export default class OrdersController {
     router: Router
     private model: OrdersModel
-    constructor(connection) {
-        this.model = new OrdersModel(connection)
+    constructor() {
+        this.model = new OrdersModel()
         this.router = express.Router()
         // order items in shoppping cart
         this.router.post("/", asyncHandler(async (req, res) => {
