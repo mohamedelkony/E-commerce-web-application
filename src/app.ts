@@ -126,7 +126,7 @@ app.use(function (err, req, res, next) {
     }
     else {
         console.log(err)
-        // throw err
+        throw err
     }
     res.status(500).send('Something broke!')
 })

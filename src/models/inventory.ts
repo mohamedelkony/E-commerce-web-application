@@ -22,8 +22,8 @@ export default class InventoryModel {
         let res = await db.query(sql, [name, price.toString(), desc])
         let image_sql = 'insert into products_images(url,its_product_id,image_name) values($1,$2,$3)';
         // added '/ to image uri so it can be accessd from any page e.g. /public/dynamic/image.png
-         await db.query(image_sql, ['/' + image_url, (res.rows[0] as any).id, null])
-        return (<any>res.rows[0]).product_id
+         await db.query(image_sql, ['/' + image_url, res.rows[0]['product_id'], null])
+        return res.rows[0]['product_id']
     }
     async edit_product_name(product_id: number, product_name: string) {
         let sql = `update inventory set product_name=$1 where id=$2;`

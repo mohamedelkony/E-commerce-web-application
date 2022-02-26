@@ -14,113 +14,16 @@
         <h1 class='cDiv'>profile</h1>
         <div>
             <table class='Xtable'>
-                <tr>
-                    <td>username</td>
-                    <td id='username'></td>
-                </tr>
-                <tr>
-                    <td>email</td>
-                    <td id='email'></td>
-                </tr>
-                <tr>
-                    <td>gender</td>
-                    <td id='gender'></td>
-                </tr>
-                <tr>
-                    <td>date of birth</td>
-                    <td id='dateofbirth'></td>
-                </tr>
-            </table>
+                <tr> <td>username</td><td id='username'></td></tr>
+                <tr> <td>email</td><td id='email'></td></tr>
+                <tr><td>gender</td><td id='gender'></td></tr>
+                <tr><td>date of birth</td><td id='dateofbirth'></td></tr></table>
         </div>
-        <div id="store"></div>
-        <script type="module">
-            import { createCardHTML } from '/scripts/componentGenerator.js';
-            async function getCartData() {
-                document.getElementById('store').innerHTML = "<h3>Loading ...</h3>";
-                const res = await fetch(`/cart`, {
-                    method: 'GET'
-                })
-                if (res.ok)
-                    loadCartData(await res.json());
-                else {
-                    alert(`error loading cart \n${await res.statusText}\n${await res.text()}`);
-                }
-            }
-            function loadCartData(data) {
-                document.getElementById("store").innerHTML = ""
-                let innerHTML = "";
-                for (let item of data)
-                    innerHTML += createCardHTML(item, 'Remove', 'card_onclick',true)
-
-                document.getElementById("store").innerHTML = innerHTML
-            }
-            getCartData()
-        </script>
-
-        <script>
-            async function getUserData() {
-                const res = await fetch(`/users/me`, {
-                    method: 'GET'
-                });
-                if (res.ok)
-                    loadUserData(await res.json());
-                else {
-                    document.body.innerHTML = "<h1>Can't get user</h1>" + res.statusText;
-                }
-            }
-            function loadUserData(data) {
-                document.getElementById('username').innerText = data.username;
-                document.getElementById('email').innerText = data.email;
-                document.getElementById('gender').innerText = data.gender;
-                document.getElementById('dateofbirth').innerText = data.birth;
-            }
-            async function card_onclick(product_id) {
-                const res = await fetch(`/cart`, {
-                    method: 'DELETE',
-                    body: JSON.stringify({ "product_id": product_id }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (res.ok) {
-                    alert('item removed')
-                    location.reload()
-                }
-                else
-                    alert(await res.status + await res.statusText + await res.data);
-            }
-            async function decreaseHandler(product_id) {
-                const res = await fetch(`/cart`, {
-                    method: 'put',
-                    body: JSON.stringify({ "product_id": product_id ,'quantity':'down'}),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (res.ok) {
-                    document.getElementById(product_id+'_quantity').innerText= (await res.json()).quantity
-                }
-                else
-                    alert(await res.status + await res.statusText + await res.data);
-            }
-            async function increaseHandler(product_id) {
-                const res = await fetch(`/cart`, {
-                    method: 'put',
-                    body: JSON.stringify({ "product_id": product_id ,'quantity':'up'}),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (res.ok) {
-                    
-                    document.getElementById(product_id+'_quantity').innerText= (await res.json()).quantity
-                }
-                else
-                    alert(await res.status + await res.statusText + await res.data);
-            }
-            
-            getUserData(window.location.pathname.split('/')[2])
-        </script>
+        <div><button onclick="order_onclick()">order your cart items now</button></div>
+        <div class="store" id="cart"></div>
+        <div class='store' id="orders"></div>
+        <script type="module" src="../public/scripts/loadUserCart.js"></script>
+        <script src="../public/scripts/profile.js"></script>
     </body>
 
 </html>

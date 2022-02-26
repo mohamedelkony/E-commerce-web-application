@@ -65,30 +65,33 @@ where a.product_id=b.id and order_id=$1
             await client.query('rollback')
             throw error
         }
+        finally
+        {
+            client.release()
+        }
     }
 
     async get_all_orders(user_id: number):
         Promise<{ 'items': [], 'total_price': number, 'status': string }[]> {
         let get_orders_ids_sql = `
-            select id,status,total_price from orders where user_id=$1`
-        let orders_metadata = await db.query(get_orders_ids_sql, [user_id])
+            select id from orders where user_id=$1`
+        let id_list = await db.query(get_orders_ids_sql, [user_id])
         let orders = []
-        for (let metadata of orders_metadata.rows) {
-            let get_order_details_sql = `
-            select product_id,quantity from orders_items where order_id=$1`
-            let order_items = await db.query(get_order_details_sql, metadata['id'])
-            let order: any = {}
-            order.items = order_items.rows as any
-            order.status = metadata['status']
-            order.total_price = metadata['total_price']
-            orders.push(order)
-        }
+        for (let row of id_list.rows) 
+            orders.push(await this.get_order(row['id']))
+        
         return orders
     }
     async get_order(order_id: number):
         Promise<{ 'items': [], 'total_price': number, 'status': string }> {
         let get_order_details_sql = `
-            select product_id,quantity from orders_items where order_id=$1`
+        select a.product_id,a.quantity,b.price,b.product_desc,b.product_name,c.url as image_url
+        from orders_items as a
+        inner join inventory as b
+        on a.product_id=b.id
+        inner join products_images as c 
+        on b.id=c.its_product_id 
+         where order_id=$1`
         let res1 = await db.query(get_order_details_sql, [order_id])
         let order: any = {}
         order.items = (res1.rows) as any

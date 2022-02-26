@@ -36,9 +36,11 @@ export default class InventoryController {
         }).single('image')
 
         /*
+        
         get products
-
+        
         /inventory?pageSize=15&pageNumber=2 GET
+        
         */
         this.router.get("/", asyncHandler(async (req, res) => {
             let pageSize = req.query.pageSize||25
