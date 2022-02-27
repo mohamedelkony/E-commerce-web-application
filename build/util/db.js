@@ -4,7 +4,7 @@ const pg_1 = require("pg");
 console.log('XXXXXXXXX');
 let pool = null;
 var dbhost = null;
-if (process.env.NODE_ENV == 'Production') {
+if (process.env.NODE_ENV == 'production') {
     pool = new pg_1.Pool({
         connectionString: process.env.DATABASE_URL,
         ssl: {
