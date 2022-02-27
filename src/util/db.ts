@@ -2,7 +2,7 @@ import { Pool } from 'pg'
 console.log('XXXXXXXXX');
 let pool: Pool = null;
 var dbhost=null;
-if (process.env.NODE_ENV == 'Production') {
+if (process.env.NODE_ENV == 'production') {
     pool = new Pool({
         connectionString: process.env.DATABASE_URL,
         ssl: {
