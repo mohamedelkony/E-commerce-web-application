@@ -72,7 +72,7 @@ where a.product_id=b.id and order_id=$1
     }
 
     async get_all_orders(user_id: number):
-        Promise<{ 'items': [], 'total_price': number, 'status': string }[]> {
+        Promise<{ 'items': [], 'total_price': number, 'status': string ,order_id:number}[]> {
         let get_orders_ids_sql = `
             select id from orders where user_id=$1`
         let id_list = await db.query(get_orders_ids_sql, [user_id])
@@ -83,9 +83,9 @@ where a.product_id=b.id and order_id=$1
         return orders
     }
     async get_order(order_id: number):
-        Promise<{ 'items': [], 'total_price': number, 'status': string }> {
+        Promise<{ 'items': [], 'total_price': number, 'status': string ,'order_id':number}> {
         let get_order_details_sql = `
-        select a.product_id,a.quantity,b.price,b.product_desc,b.product_name,c.url as image_url
+        select  a.product_id,a.quantity,b.price,b.product_desc,b.product_name,c.url as image_url
         from orders_items as a
         inner join inventory as b
         on a.product_id=b.id
@@ -100,6 +100,7 @@ where a.product_id=b.id and order_id=$1
         let res2 = await db.query(get_orders_ids_sql, [order_id])
         order.status = res2.rows[0]['status']
         order.total_price = res2.rows[0]['total_price']
+        order.order_id=order_id
         return order
     }
 

@@ -66,6 +66,7 @@ async function order_onclick()
     });
     if(res.ok)
     {
+        alert('new order was created for cart items succesfully')
         location.reload()
     }
     else{

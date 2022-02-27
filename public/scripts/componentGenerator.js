@@ -1,7 +1,10 @@
 export function createCardHTML(cardData, buttonText, onclick_method_name, display) {
     var html = `<div class="card">
-    <div class='card_details'>
-    <div class='img_wrapper'>
+    <div class='card_details'>`
+    if(cardData.quantity<=5 && cardData.quantity>0 &&display!='order')
+    html+=`<text class='over'> only ${cardData.quantity} left </text>`
+
+    html+=`<div class='img_wrapper'>
     <img src="${cardData.image_url}" alt="${cardData.image_name}" >
     </div>
     <text class='product_name'>${cardData.product_name}</text>

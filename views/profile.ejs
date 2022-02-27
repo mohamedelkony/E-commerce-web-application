@@ -6,24 +6,51 @@
 <link rel="icon" href="/images/7777.png">
 <link rel="stylesheet" href="/css/mainStyle.css">
 <link rel="stylesheet" href="/css/store.css">
+<link rel="stylesheet" href="/css/tabs.css">
 
 <title>ConvFourier</title>
 <%- include('./partials/menu')%>
 
     <body>
-        <h1 class='cDiv'>profile</h1>
-        <div>
-            <table class='Xtable'>
-                <tr> <td>username</td><td id='username'></td></tr>
-                <tr> <td>email</td><td id='email'></td></tr>
-                <tr><td>gender</td><td id='gender'></td></tr>
-                <tr><td>date of birth</td><td id='dateofbirth'></td></tr></table>
+        <div class="tabcontainer">
+        <div class="select-container">
+            <button class="tab-link" onclick="select_tab(event,'about')">about</button>
+            <button class="tab-link" id="default-open" onclick="select_tab(event,'cart-tab')">my cart</button>
+            <button class="tab-link" onclick="select_tab(event,'orders-tab')">my orders</button>
         </div>
-        <div><button onclick="order_onclick()">order your cart items now</button></div>
-        <div class="store" id="cart"></div>
-        <div class='store' id="orders"></div>
-        <script type="module" src="../public/scripts/loadUserCart.js"></script>
-        <script src="../public/scripts/profile.js"></script>
+        <div class="content-container">
+            <div class='tab-content about-tab' id='about'>
+                <table class='Xtable'>
+                    <tr> <td>username</td><td id='username'></td></tr>
+                    <tr> <td>email</td><td id='email'></td></tr>
+                    <tr><td>gender</td><td id='gender'></td></tr>
+                    <tr><td>date of birth</td><td id='dateofbirth'></td></tr></table>
+                </div>
+                <div class='tab-content cart-tab' id='cart-tab'>    
+                    <button id='order_button' style='display: none;'onclick="order_onclick()">order now</button>
+                    <div class="store" id="cart"></div>
+        </div>
+                <div class='tab-content orders-tab' id='orders-tab'>
+            
+                </div>
+            </div>
+        </div>
     </body>
-
+    <script>
+        function select_tab(event,activetab_id)
+        {
+            var tabs=document.getElementsByClassName('tab-content')
+            for(var tab of tabs)
+                tab.style.display='none'
+            var links=document.getElementsByClassName('tab-link')
+            for(var link of links)
+                link.className=link.className.replace(' active','')
+                
+            event.currentTarget.className+=' active'
+            document.getElementById(activetab_id).style.display='grid'
+        }
+        document.getElementById('default-open').click()
+    </script>
+    <script type="module" src="../public/scripts/loadUserCart.js"></script>
+    <script src="../public/scripts/profile.js"></script>
 </html>
