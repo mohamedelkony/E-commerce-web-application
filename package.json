@@ -1,5 +1,8 @@
 {
   "name": "ecommerce_app",
+  "engines": {
+    "node": "17.2.0"
+  },
   "version": "1.0.0",
   "description": "conv",
   "main": "app.js",
@@ -42,6 +45,7 @@
     "build": "npx tsc -p .",
     "dev": "nodemon --watch ./src -e ts ./src/app.ts",
     "once": "npx ts-node ./src/app.ts",
+    "start":"npx tsc -p . && node ./build/app.js",
     "tests": "mocha -r ts-node/register './tests/**/*.ts' --timeout 5000",
     "test:users": "mocha -r ts-node/register './tests/users.test.ts' --timeout 5000",
     "test:search": "mocha -r ts-node/register './tests/search.test.ts' --timeout 5000",
