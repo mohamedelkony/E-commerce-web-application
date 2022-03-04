@@ -1,4 +1,4 @@
-# Robust e-commerce web application using node.js, express.js & postgresql and vanillia js
+# Robust e-commerce web application using node.js, express.js & postgresql , vanillia js and typescript.
 
 * User authentication and authorization using JWT.
 * Full fledged amdin panel that allows adding new products ,editing
