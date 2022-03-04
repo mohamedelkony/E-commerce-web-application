@@ -71,8 +71,6 @@ let cartController = new CartController()
 let searchController = new SearchController()
 let ordersController = new OrdersController()
 
-
-
 app.use('/users', usersController.router)
 app.use('/login', loginController.router)
 app.use('/inventory', inventoryController.router)
@@ -83,6 +81,9 @@ app.use('/orders', ordersController.router)
 
 app.get('/', (req, res) => {
     res.render('home.ejs', { user_id: req.session.user_id,pageNumber:1});
+})
+app.get('/wordle', (req, res) => {
+    res.render('wordle.ejs');
 })
 
 app.get('/page', (req, res) => {

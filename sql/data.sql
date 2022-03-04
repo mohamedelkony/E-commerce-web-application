@@ -5,7 +5,7 @@
 -- Dumped from database version 14.2 (Ubuntu 14.2-1.pgdg20.04+1)
 -- Dumped by pg_dump version 14.2 (Ubuntu 14.2-1.pgdg20.04+1)
 
--- Started on 2022-02-28 00:55:46 EET
+-- Started on 2022-02-28 03:41:17 EET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,17 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 3386 (class 0 OID 16522)
--- Dependencies: 218
--- Data for Name: carts_items; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.carts_items (id, product_id, user_id, quantity) FROM stdin;
-\.
-
-
---
--- TOC entry 3378 (class 0 OID 16397)
+-- TOC entry 3369 (class 0 OID 16397)
 -- Dependencies: 210
 -- Data for Name: inventory; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -45,7 +35,69 @@ COPY public.inventory (id, product_name, price, product_desc, quantity) FROM std
 
 
 --
--- TOC entry 3382 (class 0 OID 16423)
+-- TOC entry 3371 (class 0 OID 16407)
+-- Dependencies: 212
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (id, username, password, email, birthdate, gender) FROM stdin;
+1	test1645476049	$2b$10$a/jcn4KMvEMVhN2a7vPBZOZz7rJhkpY4wjSUfCMs6loWNvgO18byW	test1645476049@gmail.com	2022-02-21	male
+2	test1645476123	$2b$10$AIIF7khnFhbja15qEflgvO1z4B9KDCVSvhCFPmOgo2J0i.zaSKf0y	test1645476123@gmail.com	2022-02-21	male
+3	test1645476402	$2b$10$1fJcYEdXNc39Tr1mtEaD0e97zOkNydL2gH.GHeuooadDAOaDGD8NW	test1645476402@gmail.com	2022-02-21	male
+4	test1645476509	$2b$10$RfC3Buu.iFwRiSlp7v1rO.gOy8ovKgQTiUA4nOXKI7Vc6HIapbaeS	test1645476509@gmail.com	2022-02-21	male
+5	test1645477532	$2b$10$8pzgVCDnAbU02LhrLYtIzOdy8.ihzD1c4s2U/M1MiFLVE0FANVSrm	test1645477532@gmail.com	2022-02-21	male
+6	momomkony	$2b$10$0Xf4Cfi5d6o3YuG9pxLnS.FmoZV0po75mcHOygjaFRYs9l7k9FoVG	konykony2112@gmail.com	1998-08-12	male
+7	test1645646651	$2b$10$7/tlQ3dmfLyq2zWIfnFEs.DMbOwzC5n5NrrSCR2fUoEO4oTfGjyXO	test1645646651@gmail.com	2022-02-23	male
+8	test1645646829	$2b$10$JqUG5M8wHZeaOVKG2j7o5OupLXzIdIbxMtTEJ1Yqwq1LO6CWveLXu	test1645646829@gmail.com	2022-02-23	male
+9	test1645647309	$2b$10$cbODoP.6K.PthvXLg/jMA.olblv/SSMPduKgeTtKv4A1nepXyMuI.	test1645647309@gmail.com	2022-02-23	male
+10	test1645648261	$2b$10$duYTcCcpOj.lzf/9lrFV7eBCrbYQUdL7.QoCrVeZAMHXLEbVqaTgy	test1645648261@gmail.com	2022-02-23	male
+11	test1645648498	$2b$10$K2GIDCuHu2AdNyY4KzzS0OGX18wpVYHyzQwAB.FJYxavqfWoCvvVS	test1645648498@gmail.com	2022-02-23	male
+12	test1645648498	$2b$10$yYshaT4DRz9.2Posloiiv.kZ/jykfLZthgwxms3Yn/zznOyhSr0HO	test1645648498@gmail.com	2022-02-23	male
+13	test1645648581	$2b$10$YbCtNbz9LlAhVBgy11CgI.LllP2RjkOLMS2Oj0WhePfEEnq2qYsCC	test1645648581@gmail.com	2022-02-23	male
+14	test1645648698	$2b$10$.ZPI13tEMssUADiGaqJ1wedDBpnyd7.w92jtlsCNyv1YtxQA2qbI6	test1645648698@gmail.com	2022-02-23	male
+15	test1645649277	$2b$10$WF4p.LtsBpkzaC2G/1by6uNWWUsqhVho8vJR0kFmb8cNH96QnxLGS	test1645649277@gmail.com	2022-02-23	male
+16	test1645649354	$2b$10$0igvTgLgLv7asSbZBhgPz.eO8zuuVCP6loFpwJM9N/Bvb5RFvGeYu	test1645649354@gmail.com	2022-02-23	male
+17	test1645649415	$2b$10$Ek0CJ8sQGm/jYl3hNw.Jp.X4JDI0yrV/IAgdxlhw/uFRPEXFRF8Ne	test1645649415@gmail.com	2022-02-23	male
+18	test1645649872	$2b$10$9yfudoWpzEAPZImZBFSZceQqwlTOX.gn8LFh7zm8e3GKHhC1.UA9q	test1645649872@gmail.com	2022-02-23	male
+19	test1645650116	$2b$10$VATfE0lU08MDrJqLSVjtsumxNLI2UZWHBAFe9kor8V4oFnhhDxAVC	test1645650116@gmail.com	2022-02-23	male
+20	test1645650557	$2b$10$vxPqRgHnp0rTBFhWINMQCuJ67mEIL3W17KWXlU5emvc/zMRMF6aSm	test1645650557@gmail.com	2022-02-23	male
+21	test1645651217	$2b$10$HXbhhCm9LH00bxqDnl5HbeAIa6PHYyPXQs3aU3l7tBC9ZAzjTpG4u	test1645651217@gmail.com	2022-02-23	male
+22	fake_test_user1	$2b$10$95CTCkkX1bbHVmGYMqt9f.ZqMURTZEDzJReuX4Oa3GN8oCvFtkWS.	fake_test_user1@gmail.com	1998-08-12	male
+23	test1645651451	$2b$10$WlgR.lCmzYhBxPYIGE6NbOClPghvsddVDXrDJ.L313pOgKXHNgETa	test1645651451@gmail.com	2022-02-23	male
+24	test1645655656	$2b$10$jZLAlB5xAVQ9olyG2X6BIuMNj1fGBrvxONyqPKt3rqXaeqiY.xWzy	test1645655656@gmail.com	2022-02-23	male
+25	test1645655979	$2b$10$ph5feS3WxY2WyUls6XtJWehkRSAS59tMHfktBHlCtqdX9FK8UsKK.	test1645655979@gmail.com	2022-02-23	male
+26	test1645655979	$2b$10$clbyL6Qiq1GzsBGwfSAfcOdHHolVhWZuiD4Tk2TWh9fBdjXO3UKbC	test1645655979@gmail.com	2022-02-23	male
+27	test1645656099	$2b$10$.g5c4Z.GHL53KNC5I2SVzOmWO8lkKpByB27wNc76qrNH1PncVQ/ae	test1645656099@gmail.com	2022-02-23	male
+28	test1645656099	$2b$10$MyAMuwSTZprjNzE3KNAt/e.gGp.0toTCD56stzMK2Fy9HcPDNpvOO	test1645656099@gmail.com	2022-02-23	male
+29	test1645657150	$2b$10$gLo22BkcyNZWwjp.dMrb5ueqg6pPkrGVrZzEOh1oFZaW3Z86sHjVW	test1645657150@gmail.com	2022-02-23	male
+30	test1645657661	$2b$10$FXqSxe4QfSKlC0K2ak1h6eO0EDdcdMC1n./fQGONXxtmCqkyoR47K	test1645657661@gmail.com	2022-02-23	male
+31	test1645657829	$2b$10$sCRSNkorDf9SsmHl6JAeuO1SwERaM5g28.DYks6AOQlhwwf/uopEy	test1645657829@gmail.com	2022-02-23	male
+32	test1645714590	$2b$10$4uH4fnv4nkvy4g.wUj4pwOFZEuhG9J0BrfX5q/EqQY46Vn8AYUm6O	test1645714590@gmail.com	2022-02-24	male
+33	test1645715312	$2b$10$Klgu4TmCfqbF2h.L.HWHC.s7jBTWpAgCXFZVHgnr2NhrGI6mFu5.6	test1645715312@gmail.com	2022-02-24	male
+34	test1645716237	$2b$10$hS4qn3e5Q4cJ6W0yEfSVzO00TLSpXNI8dWmq/Qut4M5MFyfxp0DlC	test1645716237@gmail.com	2022-02-24	male
+35	test1645716829	$2b$10$.7maLdu7Nhjn.E8Biltvyuu2xDi5Kx4H2zCgB59L8u7MyF9/WN4Zy	test1645716829@gmail.com	2022-02-24	male
+36	test1645716900	$2b$10$DAvjr9Q.B3jV38K.boI.Iek7IbCc59.1F1CGl/T9KpWzfjjAmrgZu	test1645716900@gmail.com	2022-02-24	male
+37	test1645717085	$2b$10$1guXP34kW4T0hdw4m5CPoOw9V/TuimLpUPoUReVWGKM1T1HRZ9Xza	test1645717085@gmail.com	2022-02-24	male
+38	test1645721157	$2b$10$V5f86aHEeB5897tjjG3ckuPCw96Yq7UVk.F9dNSdAHGkOZZroQYgy	test1645721157@gmail.com	2022-02-24	male
+39	test1645721183	$2b$10$znpLg0xVv9hIL28ybL8oV.8pD8r4snKCVw0XqoJO1BwZhjXWKEsIK	test1645721183@gmail.com	2022-02-24	male
+40	test1645725963	$2b$10$.rSF5s8lFy50YYn/Sl7g5.Q4GIJq0joMO7nhye12qvyW2XJOljeB2	test1645725963@gmail.com	2022-02-24	male
+41	Realme6	$2b$10$aq1ioCxQgvxoqujxX2kxZeGTLmiFkbMHO1SH1jVOtIEhgppKwWQkm	ko6nykony22@gmail.com	1998-08-12	male
+42	u	$2b$10$8NCC4/W3k/t3iZL57PmsG.CUEMw0UjonSv34B3BplJj/Vd4wXzOqi	u@gmail.com	1998-08-12	male
+\.
+
+
+--
+-- TOC entry 3377 (class 0 OID 16522)
+-- Dependencies: 218
+-- Data for Name: carts_items; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.carts_items (id, product_id, user_id, quantity) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3373 (class 0 OID 16423)
 -- Dependencies: 214
 -- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -68,7 +120,7 @@ COPY public.orders (id, user_id, status, total_price) FROM stdin;
 
 
 --
--- TOC entry 3388 (class 0 OID 16543)
+-- TOC entry 3379 (class 0 OID 16543)
 -- Dependencies: 220
 -- Data for Name: orders_items; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -94,7 +146,7 @@ COPY public.orders_items (id, order_id, product_id, quantity) FROM stdin;
 
 
 --
--- TOC entry 3384 (class 0 OID 16467)
+-- TOC entry 3375 (class 0 OID 16467)
 -- Dependencies: 216
 -- Data for Name: products_images; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -117,7 +169,7 @@ COPY public.products_images (id, url, its_product_id, image_name) FROM stdin;
 
 
 --
--- TOC entry 3389 (class 0 OID 24581)
+-- TOC entry 3380 (class 0 OID 24581)
 -- Dependencies: 221
 -- Data for Name: session; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -132,7 +184,6 @@ iPCkpphHVWC4IJ2TNKZj3sChGnIfkoTF	{"cookie":{"originalMaxAge":604800000,"expires"
 X6uoBuplbK5cTotL1U9ekm_9jtKiv03J	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-03T14:56:44.431Z","httpOnly":true,"path":"/"},"user_id":32}	2022-03-03 16:56:45
 iJINNgO6VChADH2tab5Q7HnT2WHPvvYC	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-02T22:34:17.024Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-03 00:34:18
 AYsuBO77Q-TmgZRIRMB97yBzIbIUE1X0	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-02T22:34:18.685Z","httpOnly":true,"path":"/"},"user_id":24}	2022-03-03 00:34:19
-zrqv0urnwPw2bdnASjU5AK5W07UmHJ-G	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-02T22:21:22.093Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-07 00:27:26
 xZ5m3U_CFxRERc22zYZMNN4QJUw1bfF9	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-02T23:07:41.134Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-03 01:07:42
 M7A4D7uPKyXU_bsDB__j2_AvH7OAaVrl	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-02T23:10:30.964Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-03 01:10:32
 hK6Ylwd2A3ZoESbEjsgiicHRXZB9bfR4	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-02T23:13:18.264Z","httpOnly":true,"path":"/"},"user_id":31}	2022-03-03 01:13:19
@@ -151,6 +202,7 @@ HMxgzO_KbVLbxVO-uYBQ27baJOcRi6P9	{"cookie":{"originalMaxAge":604799999,"expires"
 nixPnr8mfF86R7fyTrBDt6GOerzYameA	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-03T15:08:32.325Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-03 17:08:34
 IEnKE7ZC94o8P7SMhuBh_Y2L3VOCHlh5	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-03T14:56:30.162Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-03 16:56:31
 cHTh3m_pLWTlEg8Vxmgcrl_k8ldi7fOV	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-03T15:23:59.501Z","httpOnly":true,"path":"/"},"user_id":34}	2022-03-03 17:24:00
+nUyu8AArZTLlFWS1Xz0G7EbDb7-Kfl9_	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-06T23:38:33.305Z","httpOnly":true,"path":"/"},"user_id":42}	2022-03-07 01:38:51
 W-n40CoXvqJ_M9vWZ8mukwxOZI0nGDjO	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-03T15:23:57.716Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-03 17:23:59
 _ByCQa1XIVoX-78D2CGf0nN1rLfuT7qv	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-03T15:08:33.780Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-03 17:08:35
 66FrJMNiGrPzjJltJlRHrIaa4LkL_S2O	{"cookie":{"originalMaxAge":604800000,"expires":"2022-03-03T15:34:59.941Z","httpOnly":true,"path":"/"},"user_id":22}	2022-03-03 17:35:01
@@ -203,58 +255,7 @@ _ivx_NRYw81jCaJMD9dJM17aV7SzEqW8	{"cookie":{"originalMaxAge":604800000,"expires"
 
 
 --
--- TOC entry 3380 (class 0 OID 16407)
--- Dependencies: 212
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.users (id, username, password, email, birthdate, gender) FROM stdin;
-1	test1645476049	$2b$10$a/jcn4KMvEMVhN2a7vPBZOZz7rJhkpY4wjSUfCMs6loWNvgO18byW	test1645476049@gmail.com	2022-02-21	male
-2	test1645476123	$2b$10$AIIF7khnFhbja15qEflgvO1z4B9KDCVSvhCFPmOgo2J0i.zaSKf0y	test1645476123@gmail.com	2022-02-21	male
-3	test1645476402	$2b$10$1fJcYEdXNc39Tr1mtEaD0e97zOkNydL2gH.GHeuooadDAOaDGD8NW	test1645476402@gmail.com	2022-02-21	male
-4	test1645476509	$2b$10$RfC3Buu.iFwRiSlp7v1rO.gOy8ovKgQTiUA4nOXKI7Vc6HIapbaeS	test1645476509@gmail.com	2022-02-21	male
-5	test1645477532	$2b$10$8pzgVCDnAbU02LhrLYtIzOdy8.ihzD1c4s2U/M1MiFLVE0FANVSrm	test1645477532@gmail.com	2022-02-21	male
-6	momomkony	$2b$10$0Xf4Cfi5d6o3YuG9pxLnS.FmoZV0po75mcHOygjaFRYs9l7k9FoVG	konykony2112@gmail.com	1998-08-12	male
-7	test1645646651	$2b$10$7/tlQ3dmfLyq2zWIfnFEs.DMbOwzC5n5NrrSCR2fUoEO4oTfGjyXO	test1645646651@gmail.com	2022-02-23	male
-8	test1645646829	$2b$10$JqUG5M8wHZeaOVKG2j7o5OupLXzIdIbxMtTEJ1Yqwq1LO6CWveLXu	test1645646829@gmail.com	2022-02-23	male
-9	test1645647309	$2b$10$cbODoP.6K.PthvXLg/jMA.olblv/SSMPduKgeTtKv4A1nepXyMuI.	test1645647309@gmail.com	2022-02-23	male
-10	test1645648261	$2b$10$duYTcCcpOj.lzf/9lrFV7eBCrbYQUdL7.QoCrVeZAMHXLEbVqaTgy	test1645648261@gmail.com	2022-02-23	male
-11	test1645648498	$2b$10$K2GIDCuHu2AdNyY4KzzS0OGX18wpVYHyzQwAB.FJYxavqfWoCvvVS	test1645648498@gmail.com	2022-02-23	male
-12	test1645648498	$2b$10$yYshaT4DRz9.2Posloiiv.kZ/jykfLZthgwxms3Yn/zznOyhSr0HO	test1645648498@gmail.com	2022-02-23	male
-13	test1645648581	$2b$10$YbCtNbz9LlAhVBgy11CgI.LllP2RjkOLMS2Oj0WhePfEEnq2qYsCC	test1645648581@gmail.com	2022-02-23	male
-14	test1645648698	$2b$10$.ZPI13tEMssUADiGaqJ1wedDBpnyd7.w92jtlsCNyv1YtxQA2qbI6	test1645648698@gmail.com	2022-02-23	male
-15	test1645649277	$2b$10$WF4p.LtsBpkzaC2G/1by6uNWWUsqhVho8vJR0kFmb8cNH96QnxLGS	test1645649277@gmail.com	2022-02-23	male
-16	test1645649354	$2b$10$0igvTgLgLv7asSbZBhgPz.eO8zuuVCP6loFpwJM9N/Bvb5RFvGeYu	test1645649354@gmail.com	2022-02-23	male
-17	test1645649415	$2b$10$Ek0CJ8sQGm/jYl3hNw.Jp.X4JDI0yrV/IAgdxlhw/uFRPEXFRF8Ne	test1645649415@gmail.com	2022-02-23	male
-18	test1645649872	$2b$10$9yfudoWpzEAPZImZBFSZceQqwlTOX.gn8LFh7zm8e3GKHhC1.UA9q	test1645649872@gmail.com	2022-02-23	male
-19	test1645650116	$2b$10$VATfE0lU08MDrJqLSVjtsumxNLI2UZWHBAFe9kor8V4oFnhhDxAVC	test1645650116@gmail.com	2022-02-23	male
-20	test1645650557	$2b$10$vxPqRgHnp0rTBFhWINMQCuJ67mEIL3W17KWXlU5emvc/zMRMF6aSm	test1645650557@gmail.com	2022-02-23	male
-21	test1645651217	$2b$10$HXbhhCm9LH00bxqDnl5HbeAIa6PHYyPXQs3aU3l7tBC9ZAzjTpG4u	test1645651217@gmail.com	2022-02-23	male
-22	fake_test_user1	$2b$10$95CTCkkX1bbHVmGYMqt9f.ZqMURTZEDzJReuX4Oa3GN8oCvFtkWS.	fake_test_user1@gmail.com	1998-08-12	male
-23	test1645651451	$2b$10$WlgR.lCmzYhBxPYIGE6NbOClPghvsddVDXrDJ.L313pOgKXHNgETa	test1645651451@gmail.com	2022-02-23	male
-24	test1645655656	$2b$10$jZLAlB5xAVQ9olyG2X6BIuMNj1fGBrvxONyqPKt3rqXaeqiY.xWzy	test1645655656@gmail.com	2022-02-23	male
-25	test1645655979	$2b$10$ph5feS3WxY2WyUls6XtJWehkRSAS59tMHfktBHlCtqdX9FK8UsKK.	test1645655979@gmail.com	2022-02-23	male
-26	test1645655979	$2b$10$clbyL6Qiq1GzsBGwfSAfcOdHHolVhWZuiD4Tk2TWh9fBdjXO3UKbC	test1645655979@gmail.com	2022-02-23	male
-27	test1645656099	$2b$10$.g5c4Z.GHL53KNC5I2SVzOmWO8lkKpByB27wNc76qrNH1PncVQ/ae	test1645656099@gmail.com	2022-02-23	male
-28	test1645656099	$2b$10$MyAMuwSTZprjNzE3KNAt/e.gGp.0toTCD56stzMK2Fy9HcPDNpvOO	test1645656099@gmail.com	2022-02-23	male
-29	test1645657150	$2b$10$gLo22BkcyNZWwjp.dMrb5ueqg6pPkrGVrZzEOh1oFZaW3Z86sHjVW	test1645657150@gmail.com	2022-02-23	male
-30	test1645657661	$2b$10$FXqSxe4QfSKlC0K2ak1h6eO0EDdcdMC1n./fQGONXxtmCqkyoR47K	test1645657661@gmail.com	2022-02-23	male
-31	test1645657829	$2b$10$sCRSNkorDf9SsmHl6JAeuO1SwERaM5g28.DYks6AOQlhwwf/uopEy	test1645657829@gmail.com	2022-02-23	male
-32	test1645714590	$2b$10$4uH4fnv4nkvy4g.wUj4pwOFZEuhG9J0BrfX5q/EqQY46Vn8AYUm6O	test1645714590@gmail.com	2022-02-24	male
-33	test1645715312	$2b$10$Klgu4TmCfqbF2h.L.HWHC.s7jBTWpAgCXFZVHgnr2NhrGI6mFu5.6	test1645715312@gmail.com	2022-02-24	male
-34	test1645716237	$2b$10$hS4qn3e5Q4cJ6W0yEfSVzO00TLSpXNI8dWmq/Qut4M5MFyfxp0DlC	test1645716237@gmail.com	2022-02-24	male
-35	test1645716829	$2b$10$.7maLdu7Nhjn.E8Biltvyuu2xDi5Kx4H2zCgB59L8u7MyF9/WN4Zy	test1645716829@gmail.com	2022-02-24	male
-36	test1645716900	$2b$10$DAvjr9Q.B3jV38K.boI.Iek7IbCc59.1F1CGl/T9KpWzfjjAmrgZu	test1645716900@gmail.com	2022-02-24	male
-37	test1645717085	$2b$10$1guXP34kW4T0hdw4m5CPoOw9V/TuimLpUPoUReVWGKM1T1HRZ9Xza	test1645717085@gmail.com	2022-02-24	male
-38	test1645721157	$2b$10$V5f86aHEeB5897tjjG3ckuPCw96Yq7UVk.F9dNSdAHGkOZZroQYgy	test1645721157@gmail.com	2022-02-24	male
-39	test1645721183	$2b$10$znpLg0xVv9hIL28ybL8oV.8pD8r4snKCVw0XqoJO1BwZhjXWKEsIK	test1645721183@gmail.com	2022-02-24	male
-40	test1645725963	$2b$10$.rSF5s8lFy50YYn/Sl7g5.Q4GIJq0joMO7nhye12qvyW2XJOljeB2	test1645725963@gmail.com	2022-02-24	male
-41	Realme6	$2b$10$aq1ioCxQgvxoqujxX2kxZeGTLmiFkbMHO1SH1jVOtIEhgppKwWQkm	ko6nykony22@gmail.com	1998-08-12	male
-\.
-
-
---
--- TOC entry 3401 (class 0 OID 0)
+-- TOC entry 3386 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: carts_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -263,7 +264,7 @@ SELECT pg_catalog.setval('public.carts_items_id_seq', 23, true);
 
 
 --
--- TOC entry 3402 (class 0 OID 0)
+-- TOC entry 3387 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: inventory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -272,7 +273,7 @@ SELECT pg_catalog.setval('public.inventory_id_seq', 34, true);
 
 
 --
--- TOC entry 3403 (class 0 OID 0)
+-- TOC entry 3388 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -281,7 +282,7 @@ SELECT pg_catalog.setval('public.orders_id_seq', 16, true);
 
 
 --
--- TOC entry 3404 (class 0 OID 0)
+-- TOC entry 3389 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: orders_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -290,7 +291,7 @@ SELECT pg_catalog.setval('public.orders_items_id_seq', 20, true);
 
 
 --
--- TOC entry 3405 (class 0 OID 0)
+-- TOC entry 3390 (class 0 OID 0)
 -- Dependencies: 215
 -- Name: products_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -299,15 +300,15 @@ SELECT pg_catalog.setval('public.products_images_id_seq', 27, true);
 
 
 --
--- TOC entry 3406 (class 0 OID 0)
+-- TOC entry 3391 (class 0 OID 0)
 -- Dependencies: 211
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 41, true);
+SELECT pg_catalog.setval('public.users_id_seq', 42, true);
 
 
--- Completed on 2022-02-28 00:55:46 EET
+-- Completed on 2022-02-28 03:41:18 EET
 
 --
 -- PostgreSQL database dump complete
