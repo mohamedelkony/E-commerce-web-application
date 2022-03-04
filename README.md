@@ -1,8 +1,10 @@
 # Robust e-commerce web application using node.js, express.js & postgresql and vanillia js
 
-*User authentication and authorization using JWT.
+*
+User authentication and authorization using JWT.
 
-*Full fledged amdin panel that allows adding new products ,editing
+*
+Full fledged amdin panel that allows adding new products ,editing
 properites of current inventory or removing a product.
 *Implement users shopping cart that allows adding ,removing  items and change each item quantity.
 *Strong negative and postive integrated and unit tests for all API end points using chai and jasmine.
