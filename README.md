@@ -5,8 +5,7 @@
 properites of current inventory or removing a product.
 * Implement users shopping cart that allows adding ,removing  items and change each item quantity.
 * Strong negative and postive integrated and unit tests for all API end points using chai and jasmine.
-* Implement ACID database transction from cart items into a new order
-asserting cart items quantity is avaialbe in invnetory and adjusting it if not. 
+* Implement ACID database transction from cart items into a new order asserting cart items quantity is avaialbe in invnetory and adjusting it if not. 
 * Searching of products using part of product name and/or product description and/or min and max price.
 * Frontend is implemented in vanillia JS (CSS is resposive)    
 used fetch/xhr requests instead of server rendring for fast page retrival.
