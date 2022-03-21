@@ -26,5 +26,16 @@ export default class LoginRouter {
             else
                 res.render('login.ejs')
         })
+        /*is user logged in 
+          GET /login/status
+        */
+       this.router.get('/status',asyncHandler(async (req,res)=>{
+            if(req.session.user_id==undefined)
+            {
+                res.send({"status":0})
+            }
+            else
+                res.send({"status":1,"user_id":req.session.user_id})
+       }))
     }
 }

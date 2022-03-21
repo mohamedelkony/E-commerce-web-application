@@ -1,20 +1,41 @@
-<div class="menu">
+<div id='menu' class="menu">
     <a href='/'>home</a>
     <input type="text" id="search" onkeypress="search_onkeypress(event)" placeholder="Search...">
-    <% if(typeof user_id !='undefined'){%>
-        <a href='/profile/me'>my profile@<%=user_id%></a>
-        <a href='/logout'>logout</a>
-    <%}else{%>
-        <a href='/login'>log in</a>
-        <a href='/signup'>sign up</a>
-    <%}%>
-    <a href='/users'>Our users</a>
+    
+
+    
 </div>
 <script>
+
     async function search_onkeypress(e, id) {
-    if (e.keyCode === 13) {
-      e.preventDefault(); 
-      window.location.href = '/s/'+document.getElementById('search').value
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            window.location.href = '/s/' + document.getElementById('search').value
+        }
     }
+ is_logged()
+    async function is_logged() {
+        try {
+            const res = await fetch('/login/status', {
+                method: 'GET'
+            });
+            if (!res.ok)
+                alert(await res.text());
+            else {
+                let data = await res.json()
+                if (data.status == 0) {
+                    document.getElementById('menu').innerHTML += `
+        <a href='/login'>log in</a>
+        <a href='/signup'>sign up</a>
+                `
+                } else
+                    document.getElementById('menu').innerHTML += `
+            <a href='/profile/me'>my profile@${data.user_id}</a>
+        <a href='/logout'>logout</a>
+            `
+            }
+        } catch (error) {
+            alert(error.toString());
+        }
     }
 </script>
