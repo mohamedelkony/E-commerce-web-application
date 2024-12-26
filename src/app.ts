@@ -15,7 +15,6 @@ const compression = require('compression')
 const pgSession = require('connect-pg-simple')(session);
 import db from './util/db'
 
-
 //app.use(helmet())
 // compress all responses
 app.use(compression())
