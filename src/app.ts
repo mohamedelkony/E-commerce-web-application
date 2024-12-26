@@ -22,8 +22,6 @@ app.use(compression())
 //load environment variables
 dotenv.config();
 
-
-
 console.log('server is booting ...')
 
 
