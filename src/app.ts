@@ -19,7 +19,6 @@ import db from './util/db'
 app.use(compression())
 //load environment variables
 dotenv.config();
-
 console.log('server is booting ...')
 
 app.set('views', path.join(__dirname, '..', 'views'))
