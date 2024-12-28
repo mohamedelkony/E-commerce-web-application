@@ -8,7 +8,7 @@ properites of current inventory or removing a product.
 * Implement ACID database transction from cart items into a new order asserting cart items quantity is avaialbe in invnetory and adjusting it if not. 
 * Searching of products using part of product name and/or product description and/or min and max price.
 * Frontend is implemented in vanillia JS (CSS is resposive)
-
+\
 
 * 
 used fetch/xhr requests instead of server rendring for fast page retrival.
