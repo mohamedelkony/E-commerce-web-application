@@ -8,7 +8,10 @@ properites of current inventory or removing a product.
 * Implement ACID database transction from cart items into a new order asserting cart items quantity is avaialbe in invnetory and adjusting it if not. 
 * Searching of products using part of product name and/or product description and/or min and max price.
 * Frontend is implemented in vanillia JS (CSS is resposive)    
-used fetch/xhr requests instead of server rendring for fast page retrival.
+used fetch/xhr requests instead of server rendring for
+
+
+fast page retrival.
 * Using prepared stataments to prevent SQL injection.
 * Upload prdoucts images dynamically and saving them in server local file system instead of using CDN.
 * Deploying website to heroku live at [link](https://morning-wildwood-44476.herokuapp.com/)
