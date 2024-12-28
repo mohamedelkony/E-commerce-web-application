@@ -6,7 +6,7 @@ import UsersController from './controllers/users'
 import InventoryController from './controllers/invenotry'
 import SearchController from './controllers/search'
 import CartController from './controllers/cart'asdasd
-import morgan from 'morgan'
+import morgan from 'morgan',l,l
 import helmet from 'helmet'
 const app = express()
 const session = require('express-session');
