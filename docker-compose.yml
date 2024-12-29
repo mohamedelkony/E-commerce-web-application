@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_USER: wwe13wwe13
+      POSTGRES_PASSWORD: wwe13wwe13
+      POSTGRES_DB: wwe13wwe13
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  app:
+    container_name: app
+    build:
+      context: .
+      target: app
+    ports:
+      - 3000:3000
+    environment:
+      - PGPORT=5432
+      - PGPASSWORD=wwe13wwe13
+      - PGDATABASE=wwe13wwe13
+      - PGUSER=wwe13wwe13
+      - PGHOST=db
+    depends_on:
+      - db
+  test_cart:
+    container_name: test_cart
+    build:
+      context: .
+      target: run_tests
+    command: ["npm", "run", "test:cart"]
+    environment:
+      - PGPORT=5432
+      - PGPASSWORD=wwe13wwe13
+      - PGDATABASE=wwe13wwe13
+      - PGUSER=wwe13wwe13
+      - PGHOST=db
+      - APP_URL=http://app:3000
+    depends_on:
+      - db
+      - app
+  test_order:
+    container_name: test_order
+    extends:
+      service: test_cart
+    command: ["npm", "run", "test:orders"]
+
+volumes:
+  postgres_data:
