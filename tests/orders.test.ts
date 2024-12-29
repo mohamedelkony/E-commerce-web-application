@@ -1,23 +1,14 @@
 process.env.NODE_ENV = 'test'
-process.env.PGHOST='localhost'
-process.env.PGUSER='postgres'
-process.env.PGDATABASE='convFourier'
-process.env.PGPASSWORD='nodejs'
-process.env.PGPORT='5432'
 
 import chaiHttp from 'chai-http'
 import chai from 'chai'
 import TestModel from '../src/models/test'
 
-
 let expect = chai.expect
 chai.use(chaiHttp)
 
 let testModel = new TestModel()
-
-let url = 'http://127.0.0.1:3000'
-let user_id = -1
-let epoc = () => Math.ceil(new Date().getTime() / 1000)
+let url = process.env.APP_URL || 'http://127.0.0.1:3000'
 let fake_user = {
     'username': 'fake_test_user1',
     'email': `fake_test_user1@gmail.com`,
