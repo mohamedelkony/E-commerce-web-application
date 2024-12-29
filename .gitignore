@@ -1,5 +1,4 @@
 ###
 node_modules/
-views/wordle.ejs
-playground.ts
 .env
+build/
