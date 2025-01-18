@@ -1,7 +1,5 @@
 pipeline {
-            agent {
-                label "Controller" 
-            }
+    agent any
     stages {
         stage('Provision EC2 Instance') {
             agent {
@@ -10,31 +8,32 @@ pipeline {
             stages{
                 stage('Create jenkins agent EC2 instance'){
                     steps {
-                                
-                    //  Create an EC2 instance using Terraform
-                    checkout scm // #TODO Fetches entire repo although only CI-CD folder is needed (check for better design)
+                        // Create an EC2 instance using Terraform
+                        checkout scm // #TODO Fetches entire repo although only CI-CD folder is needed (check for better design)
 
+                        // agent EC2 instance private key is static key in AWS and jenkis controller                    
+                        withCredentials([sshUserPrivateKey(
+                            credentialsId: 'Jenkis_agent_EC2_private_key',
+                            keyFileVariable: 'Jenkis_agent_EC2_private_key_Path',
+                            usernameVariable: 'Jenkis_agent_EC2_private_key_Username' 
+                        )]){
+                            dir ('CI-CD/ansible') {
+                                sh """
+                                    ansible-playbook provision_jenkins_agent_EC2_instance.yml -vvv 
+                                    -e "private_key_path=${env.Jenkis_agent_EC2_private_key_Path}"
+                                    -e "EC2_instance_ssh_username=${env.Jenkis_agent_EC2_private_key_Username}"
+                                    -e "jenkins_controller_ip=54.193.5.178"
+                                """
+                            }
+                        }
+                        //  read IP address of the instance via file and pass it to jenkins
 
-                    
-                    sh 'ls -la'
-                    
-                    dir ('CI-CD') {
-                        echo 'Changed directory to CI-CD'
-                        sh 'ls -la'
-                    }
-
-                    // run ansible playbook to create ec2 instance with docker agent installed
-
-                    // private key should be fetched from terraform output
-                    // dynamiclly add EC2 private key to jenkins credentials
-                    // read IP address of the instance via file and pass it to jenkins
-
-                    //create new agent with IP and key
+                        //create new agent with IP and key
 
                     }    
             
                 }
-                stage('Install Docker on EC2 instance'){
+                stage('Build E-commerce web application') {
                     steps {
                         echo '==================='
                         sh 'ls -la'

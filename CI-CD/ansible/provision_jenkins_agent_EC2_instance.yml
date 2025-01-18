@@ -1,0 +1,20 @@
+- name: Provision EC2 instance and configure Docker
+  hosts: localhost # Jenkins controller EC2 instance
+  gather_facts: no
+  roles:
+    - role: roles/terraform_provision
+
+- name: Configure Docker on provisioned EC2 instance
+  hosts: Jenkins_ec2_instances
+  become: true
+  roles:
+    - role: roles/ensure_docker
+
+- name: Confinure Jenkins agent on provisioned EC2 instance
+  hosts: Jenkins_ec2_instances
+  become: false
+  roles:
+    # using JAR agent instead of docker agent as suits better for ssh establish in case of dynamic EC2 instances
+    # if docker agents are used, then jenkins controller needs to ssh connect to the docker container runnig on EC2 instance not to the EC2 instance itself 
+    # this would need configuring of ssh config file to apply SSH RemoteCommand docker exec -it <container_id> so that command runs on the docker agent container
+    - role: roles/ensure_jenkins_agent_jar 
