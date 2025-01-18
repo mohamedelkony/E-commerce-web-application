@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
     stages {
         stage('Provision EC2 Instance') {
             agent {
@@ -16,19 +16,17 @@ pipeline {
                             credentialsId: 'Jenkis_agent_EC2_private_key',
                             keyFileVariable: 'Jenkis_agent_EC2_private_key_Path',
                             usernameVariable: 'Jenkis_agent_EC2_private_key_Username' 
-                        )]) {
-
-                        dir ('CI-CD') {
-                        
-                            sh """
-                                ansible-playbook provision_jenkins_agent_EC2_instance.yml -vvv 
-                                -e "private_key_path=${Jenkis_agent_EC2_private_key_Path}"
-                                -e "EC2_instance_ssh_username=${Jenkis_agent_EC2_private_key_Username}"
-                                -e "jenkins_controller_ip=54.193.5.178"
-                            """
+                        )]){
+                            dir ('CI-CD/ansible') {
+                                sh """
+                                    ansible-playbook provision_jenkins_agent_EC2_instance.yml -vvv 
+                                    -e "private_key_path=${env.Jenkis_agent_EC2_private_key_Path}"
+                                    -e "EC2_instance_ssh_username=${env.Jenkis_agent_EC2_private_key_Username}"
+                                    -e "jenkins_controller_ip=54.193.5.178"
+                                """
+                            }
                         }
-
-                        // read IP address of the instance via file and pass it to jenkins
+                        //  read IP address of the instance via file and pass it to jenkins
 
                         //create new agent with IP and key
 
