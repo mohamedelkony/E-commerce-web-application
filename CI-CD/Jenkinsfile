@@ -1,31 +1,44 @@
 pipeline {
-    stages {
-        agent {
+            agent {
                 label "Controller" // Use the dynamically assigned label
-        }
+            }
+    stages {
         stage('Provision EC2 Instance') {
-            stage('Create jenkins agent EC2 instance'){
-                steps {
-                // Create an EC2 instance using Terraform
-                checkout scm // #TODO Fetches entire repo although only CI-CD folder is needed (check for better design)
-                
-                
-                ch  {
-                    sh 'ls -la'
-                }
-                ch (dir: 'CI-CD') {
-                    echo 'Changed directory to CI-CD'
-                    sh 'ls -la'
-                }
-                // run ansible playbook to create ec2 instance with docker agent installed
+            agent {
+                label "Controller" // Use the dynamically assigned label
+            }
+            stages{
+                stage('Create jenkins agent EC2 instance'){
+                    steps {
+                    // Create an EC2 instance using Terraform
+                    checkout scm // #TODO Fetches entire repo although only CI-CD folder is needed (check for better design)
 
-                // private key should be fetched from terraform output
-                // dynamiclly add EC2 private key to jenkins credentials
-                // read IP address of the instance via file and pass it to jenkins
-                
-                //create new agent with IP and key
 
-                }    
+                    
+                    sh 'ls -la'
+                    
+                    dir ('CI-CD') {
+                        echo 'Changed directory to CI-CD'
+                        sh 'ls -la'
+                    }
+
+                    // run ansible playbook to create ec2 instance with docker agent installed
+
+                    // private key should be fetched from terraform output
+                    // dynamiclly add EC2 private key to jenkins credentials
+                    // read IP address of the instance via file and pass it to jenkins
+
+                    //create new agent with IP and key
+
+                    }    
+            
+                }
+                stage('Install Docker on EC2 instance'){
+                    steps {
+                        echo '==================='
+                        sh 'ls -la'
+                    }
+                }
             }
         }
     }
