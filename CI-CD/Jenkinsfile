@@ -1,16 +1,16 @@
 pipeline {
             agent {
-                label "Controller" // Use the dynamically assigned label
+                label "Controller" 
             }
     stages {
         stage('Provision EC2 Instance') {
             agent {
-                label "Controller" // Use the dynamically assigned label
+                label "Controller" 
             }
             stages{
                 stage('Create jenkins agent EC2 instance'){
                     steps {
-                    // Create an EC2 instance using Terraform
+                    //  Create an EC2 instance using Terraform
                     checkout scm // #TODO Fetches entire repo although only CI-CD folder is needed (check for better design)
 
 
