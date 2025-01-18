@@ -1,0 +1,110 @@
+pipeline {
+    agent any // Run the initial stages on any available agent
+
+    stages {
+        agent {
+                label "Controller" // Use the dynamically assigned label
+        }
+        stage('Provision EC2 Instance') {
+            stage('Create jenkins agent EC2 instance'){
+                steps {
+                // Create an EC2 instance using Terraform
+                checkout scm // #TODO Fetches entire repo although only CI-CD folder is needed (check for better design)
+                
+                
+                ch  {
+                    sh 'ls -la'
+                }
+                ch (dir: 'CI-CD') {
+                    echo 'Changed directory to CI-CD'
+                    sh 'ls -la'
+                }
+                // run ansible playbook to create ec2 instance with docker agent installed
+
+                // private key should be fetched from terraform output
+                // dynamiclly add EC2 private key to jenkins credentials
+                // read IP address of the instance via file and pass it to jenkins
+                
+                //create new agent with IP and key
+                //def publicIp = sh(
+                //    cat /home/ubuntu/jenkins-agent/ip.txt
+                //).trim()
+                //
+                //// Store the instance ID and public IP in environment variables
+                //env.EC2_INSTANCE_ID = instanceId
+                //env.EC2_PUBLIC_IP = publicIp
+                //
+                //echo "EC2 Instance Created: ${env.EC2_INSTANCE_ID}"
+                //echo "Public IP: ${env.EC2_PUBLIC_IP}"
+                }    
+            }
+            stage('Add EC2 Instance as a Jenkins Agent'){
+                when: {false}
+                steps {
+                    script {
+                    // Define a unique label for the EC2 agent
+                    def agentLabel = "ec2-agent-${env.EC2_INSTANCE_ID}"
+
+                    // Add the EC2 instance as a Jenkins agent dynamically
+                    jenkins.model.Jenkins.instance.addNode(
+                        new hudson.slaves.DumbSlave(
+                            agentLabel, // Name of the agent
+                            "Dynamic EC2 Agent", // Description
+                            "/home/ubuntu/jenkins-agent", // Remote root directory
+                            "1", // Number of executors
+                            hudson.model.Node.Mode.NORMAL,
+                            agentLabel, // Label (same as the agent name)
+                            new hudson.plugins.sshslaves.SSHLauncher(
+                                env.EC2_PUBLIC_IP, // Public IP of the EC2 instance
+                                22, // SSH port
+                                "ssh-credentials-id", // Jenkins credential ID for SSH private key
+                                "", // JVM options
+                                "", // JavaPath
+                                "", // Prefix Start Agent Command
+                                "", // Suffix Start Agent Command
+                                60, // Connection timeout in seconds
+                                3, // Maximum number of retries
+                                15 // Retry wait time in seconds
+                            ),
+                            new hudson.slaves.RetentionStrategy.Always(), // Retention strategy
+                            new LinkedList() // Node properties
+                        )
+                    )
+
+                    // Store the agent label in an environment variable
+                    env.EC2_AGENT_LABEL = agentLabel
+
+                    echo "Added EC2 instance as Jenkins agent with label: ${env.EC2_AGENT_LABEL}"
+                    }
+                }
+            }
+        }
+
+        stage('Run on EC2 Agent') {
+            when: {false}
+            agent {
+                label "${env.EC2_AGENT_LABEL}" // Use the dynamically assigned label
+            }
+            steps {
+                sh(
+                    echo "Running on EC2 agent with IP: ${env.EC2_PUBLIC_IP}"
+                    sh 'docker --version' // Example command to verify Docker is installed
+                )
+            }
+        }
+
+        stage('Terminate EC2 Instance') {
+            when: {false}
+            steps {
+                script {
+                    // Terminate the EC2 instance
+                    sh """
+                    aws ec2 terminate-instances --instance-ids ${env.EC2_INSTANCE_ID}
+                    """
+
+                    echo "Terminated EC2 Instance: ${env.EC2_INSTANCE_ID}"
+                }
+            }
+        }
+    }
+}
