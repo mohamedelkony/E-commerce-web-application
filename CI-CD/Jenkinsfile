@@ -10,6 +10,7 @@ pipeline {
             stages{
                 stage('Create jenkins agent EC2 instance'){
                     steps {
+                                
                     //  Create an EC2 instance using Terraform
                     checkout scm // #TODO Fetches entire repo although only CI-CD folder is needed (check for better design)
 
