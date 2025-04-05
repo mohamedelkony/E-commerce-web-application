@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: e-commerce-web-app
+  labels:
+    app: e-commerce-web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: e-commerce-web-app
+  template:
+    metadata:
+      labels:
+        app: e-commerce-web-app
+    spec:
+      containers:
+      - name: e-commerce-web-app
+        image: mohamedelkony/e-commerce-web-app:1.0.0
+        env:
+          - name: PORT
+            value: "9090"
+        ports:
+        - containerPort: 9090
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "300m"
