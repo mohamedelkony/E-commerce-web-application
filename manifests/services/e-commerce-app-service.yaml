@@ -8,6 +8,6 @@ spec:
     app: e-commerce-web-app
   ports:
     - protocol: TCP
-      port: 7000
+      port: 7000 #Internal cluster IP (reuse it for LB/Ingress)
       targetPort: 9090
-      nodePort: 31001
+      nodePort: 31001 #For external access if no ingress/LB are used
